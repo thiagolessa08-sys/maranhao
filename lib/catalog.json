@@ -1,427 +1,328 @@
 {
-  "gerado_em": "2026-05-11T00:00:00.000Z",
+  "gerado_em": "2026-06-01T00:00:00.000Z",
   "mapa_conceitos": {
-    "despesas": ["FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO", "FATO_BIORC_ALTERACAO_ORCAMENTARIA_DESPESA"],
-    "secretaria": ["DIM_BIORC_INSTITUCIONAL"],
-    "orgao": ["DIM_BIORC_INSTITUCIONAL"],
-    "unidade gestora": ["DIM_BIORC_UNIDADE_GESTORA"],
-    "fornecedor": ["DIM_BIORC_FORNECEDOR"],
-    "receita": ["FATO_BIORC_EXECUCAO_RECEITA"],
-    "arrecadacao": ["FATO_BIORC_EXECUCAO_RECEITA"],
-    "orcamento": ["FATO_BIORC_ELABORACAO_ORCAMENTO"],
-    "LOA": ["FATO_BIORC_ELABORACAO_ORCAMENTO"],
-    "empenho": ["FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO"],
-    "liquidacao": ["FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO"],
-    "pagamento": ["FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO"],
-    "restos a pagar": ["FATO_BIORC_MENSAL_RESTOS_A_PAGAR"],
-    "RAP": ["FATO_BIORC_MENSAL_RESTOS_A_PAGAR"],
-    "suprimento financeiro": ["FATO_BIORC_SUPRIMENTO_FINANCEIRO_DESPESA"],
-    "adiantamento": ["FATO_BIORC_SUPRIMENTO_FINANCEIRO_DESPESA"],
-    "elemento despesa": ["DIM_BIORC_ELEMENTO_DESPESA", "DIM_BIORC_NATUREZA_DESPESA"],
-    "grupo despesa": ["DIM_BIORC_GRUPO_DESPESA"],
-    "fonte recurso": ["DIM_BIORC_FONTE_RECURSO"],
-    "funcao": ["DIM_BIORC_FUNCAO"],
-    "subfuncao": ["DIM_BIORC_SUBFUNCAO"],
-    "programa": ["DIM_BIORC_PROGRAMA"],
-    "acao": ["DIM_BIORC_ACAO"],
-    "data": ["DIM_BIORC_DATA_CALENDARIO"],
-    "mes": ["DIM_BIORC_DATA_CALENDARIO"],
-    "ano": ["DIM_BIORC_DATA_CALENDARIO"],
-    "modalidade": ["DIM_BIORC_MODALIDADE_DESPESA"],
-    "suplementacao": ["FATO_BIORC_ALTERACAO_ORCAMENTARIA_DESPESA"],
-    "reducao orcamentaria": ["FATO_BIORC_ALTERACAO_ORCAMENTARIA_DESPESA"],
-    "contribuinte": ["PREFEITURA_IPTU_LANCADO", "PREFEITURA_IPTU_PAGO"],
-    "IPTU": ["PREFEITURA_IPTU_LANCADO", "PREFEITURA_IPTU_PAGO"],
-    "iptu lancado": ["PREFEITURA_IPTU_LANCADO"],
-    "iptu pago": ["PREFEITURA_IPTU_PAGO"],
-    "inadimplencia": ["PREFEITURA_IPTU_LANCADO", "PREFEITURA_IPTU_PAGO"],
-    "bairro": ["PREFEITURA_IPTU_LANCADO", "PREFEITURA_IPTU_PAGO"]
+    "despesa": ["FATO_INTERVENCAO_DOTACAO"],
+    "gasto": ["FATO_INTERVENCAO_DOTACAO"],
+    "dotacao": ["FATO_INTERVENCAO_DOTACAO"],
+    "empenho": ["FATO_INTERVENCAO_DOTACAO"],
+    "liquidacao": ["FATO_INTERVENCAO_DOTACAO"],
+    "pagamento": ["FATO_INTERVENCAO_DOTACAO"],
+    "suplementacao": ["FATO_INTERVENCAO_DOTACAO"],
+    "credito adicional": ["FATO_INTERVENCAO_DOTACAO"],
+    "execucao orcamentaria": ["FATO_INTERVENCAO_DOTACAO"],
+    "receita": ["FATO_EXECUCAO_RECEITA"],
+    "arrecadacao": ["FATO_EXECUCAO_RECEITA"],
+    "deducao": ["FATO_EXECUCAO_RECEITA"],
+    "fundeb": ["FATO_EXECUCAO_RECEITA"],
+    "renuncia": ["FATO_EXECUCAO_RECEITA"],
+    "repasse": ["FATO_REPASSE_FINANCEIRO"],
+    "transferencia financeira": ["FATO_REPASSE_FINANCEIRO"],
+    "cota financeira": ["FATO_REPASSE_FINANCEIRO"],
+    "data": ["DIM_DATA_CALENDARIO"],
+    "ano": ["DIM_DATA_CALENDARIO"],
+    "mes": ["DIM_DATA_CALENDARIO"],
+    "trimestre": ["DIM_DATA_CALENDARIO"],
+    "unidade gestora": ["DIM_UNIDADE_GESTORA"],
+    "UG": ["DIM_UNIDADE_GESTORA"],
+    "orgao": ["DIM_INSTITUCIONAL"],
+    "secretaria": ["DIM_INSTITUCIONAL"],
+    "unidade orcamentaria": ["DIM_INSTITUCIONAL"],
+    "poder": ["DIM_INSTITUCIONAL"],
+    "fonte recurso": ["DIM_FONTE_RECURSO"],
+    "fonte de recurso": ["DIM_FONTE_RECURSO"],
+    "natureza despesa": ["DIM_NATUREZA_DESPESA"],
+    "elemento despesa": ["DIM_NATUREZA_DESPESA"],
+    "subacao": ["DIM_SUBACAO"],
+    "programa de trabalho": ["DIM_SUBACAO"],
+    "acao": ["DIM_SUBACAO"],
+    "fornecedor": ["DIM_FORNECEDOR"],
+    "credor": ["DIM_FORNECEDOR"],
+    "CNPJ": ["DIM_FORNECEDOR"],
+    "emenda parlamentar": ["DIM_EMENDA_PARLAMENTAR"],
+    "emenda": ["DIM_EMENDA_PARLAMENTAR"],
+    "grupo programacao financeira": ["DIM_GRUPO_PROG_FINANCEIRA"],
+    "natureza receita": ["DIM_NATUREZA_RECEITA"],
+    "tributo": ["DIM_NATUREZA_RECEITA"]
   },
   "entradas": [
     {
-      "tabela": "FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO",
-      "descricao": "Tabela FATO principal da despesa orçamentária mensal. Contém os valores empenhados, liquidados e pagos por mês, agrupados por secretaria, natureza da despesa, fonte de recurso e fornecedor.",
-      "conceitos": ["despesas", "empenho", "liquidacao", "pagamento", "dotacao", "execucao orcamentaria"],
+      "tabela": "FATO_INTERVENCAO_DOTACAO",
+      "descricao": "Tabela FATO da execução orçamentária da despesa do Estado do Maranhão. Contém os valores por estágio (dotação atualizada, suplementação, redução, pré-empenho, empenho, liquidação e pagamento) agrupados por data, unidade gestora, órgão, fonte de recurso, natureza da despesa, subação, fornecedor e emenda parlamentar.",
+      "conceitos": ["despesa", "gasto", "dotacao", "empenho", "liquidacao", "pagamento", "suplementacao", "execucao orcamentaria"],
       "colunas_chave": {
-        "SK_DATA_CALENDARIO_MES": "Chave para DIM_BIORC_DATA_CALENDARIO — filtrar por mês/ano",
-        "SK_INSTITUCIONAL": "Chave para DIM_BIORC_INSTITUCIONAL — secretaria/órgão",
-        "SK_UNIDADE_GESTORA": "Chave para DIM_BIORC_UNIDADE_GESTORA",
-        "SK_NATUREZA_DESPESA": "Chave para DIM_BIORC_NATUREZA_DESPESA — elemento de despesa",
-        "SK_FONTE_RECURSO": "Chave para DIM_BIORC_FONTE_RECURSO",
-        "SK_FORNECEDOR": "Chave para DIM_BIORC_FORNECEDOR",
-        "SK_FUNCIONAL_PROGRAMATICA": "Chave para BRIDGE_BIORC_FUNCIONAL_PROGRAMATICA — função/programa/ação",
+        "SK_DATA_CALENDARIO": "JOIN com DIM_DATA_CALENDARIO — filtrar por ano/mês",
+        "SK_UNIDADE_GESTORA": "JOIN com DIM_UNIDADE_GESTORA",
+        "SK_INSTITUCIONAL": "JOIN com DIM_INSTITUCIONAL — órgão/unidade orçamentária",
+        "SK_FONTE_RECURSO": "JOIN com DIM_FONTE_RECURSO",
+        "SK_NATUREZA_DESPESA": "JOIN com DIM_NATUREZA_DESPESA — elemento de despesa",
+        "SK_SUBACAO": "JOIN com DIM_SUBACAO — programa de trabalho/ação",
+        "SK_FORNECEDOR": "JOIN com DIM_FORNECEDOR",
+        "SK_EMENDA_PARLAMENTAR": "JOIN com DIM_EMENDA_PARLAMENTAR",
+        "SK_GRUPO_PROG_FINANCEIRA": "JOIN com DIM_GRUPO_PROG_FINANCEIRA",
+        "VL_LEI_MAIS_CREDITO": "Dotação atualizada (lei + créditos adicionais)",
+        "VL_SALDO_MES_SUPLEMENTACAO": "Suplementações no mês",
+        "VL_SALDO_MES_REDUCAO": "Reduções no mês",
+        "VL_SALDO_PRE_EMPENHO": "Pré-empenho",
         "VL_SALDO_MES_EMPENHADO": "Valor empenhado no mês",
         "VL_SALDO_MES_LIQUIDADO": "Valor liquidado no mês",
-        "VL_SALDO_MES_PAGO": "Valor pago no mês (mais relevante para análise de despesa efetiva)",
-        "VL_SALDO_MES_SUPLEMENTACAO": "Valor de suplementação no mês",
-        "VL_SALDO_MES_REDUCAO": "Valor de redução orçamentária no mês",
-        "VL_SALDO_MES_LEI_MAIS_CREDITO": "Dotação atualizada (lei + créditos adicionais)"
+        "VL_SALDO_MES_PAGO": "Valor pago no mês (despesa efetivamente realizada)"
       },
       "joins_comuns": [
-        "DIM_BIORC_INSTITUCIONAL ON SK_INSTITUCIONAL = SK_INSTITUCIONAL",
-        "DIM_BIORC_DATA_CALENDARIO ON SK_DATA_CALENDARIO_MES = SK_DATA_CALENDARIO",
-        "DIM_BIORC_NATUREZA_DESPESA ON SK_NATUREZA_DESPESA = SK_NATUREZA_DESPESA",
-        "DIM_BIORC_FORNECEDOR ON SK_FORNECEDOR = SK_FORNECEDOR",
-        "DIM_BIORC_FONTE_RECURSO ON SK_FONTE_RECURSO = SK_FONTE_RECURSO",
-        "DIM_BIORC_UNIDADE_GESTORA ON SK_UNIDADE_GESTORA = SK_UNIDADE_GESTORA"
+        "DIM_DATA_CALENDARIO ON SK_DATA_CALENDARIO = SK_DATA_CALENDARIO",
+        "DIM_UNIDADE_GESTORA ON SK_UNIDADE_GESTORA = SK_UNIDADE_GESTORA",
+        "DIM_INSTITUCIONAL ON SK_INSTITUCIONAL = SK_INSTITUCIONAL",
+        "DIM_FONTE_RECURSO ON SK_FONTE_RECURSO = SK_FONTE_RECURSO",
+        "DIM_NATUREZA_DESPESA ON SK_NATUREZA_DESPESA = SK_NATUREZA_DESPESA",
+        "DIM_SUBACAO ON SK_SUBACAO = SK_SUBACAO",
+        "DIM_FORNECEDOR ON SK_FORNECEDOR = SK_FORNECEDOR",
+        "DIM_EMENDA_PARLAMENTAR ON SK_EMENDA_PARLAMENTAR = SK_EMENDA_PARLAMENTAR",
+        "DIM_GRUPO_PROG_FINANCEIRA ON SK_GRUPO_PROG_FINANCEIRA = SK_GRUPO_PROG_FINANCEIRA"
       ],
       "exemplos_query": [
-        "-- Maiores despesas por secretaria no ano corrente (apenas poder executivo, sem Câmara e sem registros genéricos):\nSELECT TOP 20\n  i.DS_UO AS secretaria,\n  SUM(f.VL_SALDO_MES_PAGO) AS total_pago,\n  SUM(f.VL_SALDO_MES_LIQUIDADO) AS total_liquidado,\n  SUM(f.VL_SALDO_MES_EMPENHADO) AS total_empenhado\nFROM pref_aruja_sp.FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO f\nJOIN pref_aruja_sp.DIM_BIORC_INSTITUCIONAL i ON f.SK_INSTITUCIONAL = i.SK_INSTITUCIONAL\nJOIN pref_aruja_sp.DIM_BIORC_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO_MES = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = 2025\n  AND i.CD_ORGAO = '1'\n  AND i.DS_UO <> i.DS_ORGAO\nGROUP BY i.DS_UO\nORDER BY total_pago DESC",
-        "-- Despesas mensais do ano corrente:\nSELECT\n  d.NO_ANO_MES,\n  d.DS_MES,\n  SUM(f.VL_SALDO_MES_PAGO) AS total_pago\nFROM pref_aruja_sp.FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO f\nJOIN pref_aruja_sp.DIM_BIORC_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO_MES = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = YEAR(NOW())\nGROUP BY d.NO_ANO_MES, d.DS_MES\nORDER BY d.NO_ANO_MES",
-        "-- Maiores fornecedores pagos:\nSELECT TOP 20\n  forn.DS_FORNECEDOR,\n  forn.CD_CPF_CNPJ_FORNECEDOR,\n  SUM(f.VL_SALDO_MES_PAGO) AS total_pago\nFROM pref_aruja_sp.FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO f\nJOIN pref_aruja_sp.DIM_BIORC_FORNECEDOR forn ON f.SK_FORNECEDOR = forn.SK_FORNECEDOR\nJOIN pref_aruja_sp.DIM_BIORC_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO_MES = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = YEAR(NOW())\nGROUP BY forn.DS_FORNECEDOR, forn.CD_CPF_CNPJ_FORNECEDOR\nORDER BY total_pago DESC"
+        "-- Maiores despesas pagas por órgão no ano:\nSELECT TOP 20\n  i.DS_ORGAO AS orgao,\n  SUM(f.VL_SALDO_MES_PAGO) AS total_pago,\n  SUM(f.VL_SALDO_MES_LIQUIDADO) AS total_liquidado,\n  SUM(f.VL_SALDO_MES_EMPENHADO) AS total_empenhado\nFROM FATO_INTERVENCAO_DOTACAO f\nJOIN DIM_INSTITUCIONAL i ON f.SK_INSTITUCIONAL = i.SK_INSTITUCIONAL\nJOIN DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = 2025\nGROUP BY i.DS_ORGAO\nORDER BY total_pago DESC",
+        "-- Despesa paga mês a mês no ano:\nSELECT d.NO_MES, d.DS_MES, SUM(f.VL_SALDO_MES_PAGO) AS total_pago\nFROM FATO_INTERVENCAO_DOTACAO f\nJOIN DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = 2025\nGROUP BY d.NO_MES, d.DS_MES\nORDER BY d.NO_MES",
+        "-- Maiores fornecedores pagos:\nSELECT TOP 20 forn.DS_FORNECEDOR, forn.CD_CPF_CNPJ_FORNECEDOR, SUM(f.VL_SALDO_MES_PAGO) AS total_pago\nFROM FATO_INTERVENCAO_DOTACAO f\nJOIN DIM_FORNECEDOR forn ON f.SK_FORNECEDOR = forn.SK_FORNECEDOR\nJOIN DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = 2025\nGROUP BY forn.DS_FORNECEDOR, forn.CD_CPF_CNPJ_FORNECEDOR\nORDER BY total_pago DESC"
       ]
     },
     {
-      "tabela": "DIM_BIORC_INSTITUCIONAL",
-      "descricao": "Dimensão institucional — cadastro de secretarias, órgãos e unidades orçamentárias da Prefeitura de Arujá. Cada linha representa uma unidade orçamentária (UO) dentro de um órgão.",
-      "conceitos": ["secretaria", "orgao", "unidade orcamentaria", "institucional"],
+      "tabela": "FATO_EXECUCAO_RECEITA",
+      "descricao": "Tabela FATO da arrecadação da receita do Estado. Contém a arrecadação bruta e as diversas deduções (orçamentária, FUNDEB, transferências constitucionais/legais, renúncia e outras), por data, unidade gestora, fonte de recurso e natureza da receita.",
+      "conceitos": ["receita", "arrecadacao", "deducao", "fundeb", "renuncia"],
       "colunas_chave": {
-        "SK_INSTITUCIONAL": "Chave surrogate — usada para JOIN com tabelas FATO",
-        "CD_ORGAO": "Código do órgão (VARCHAR). IMPORTANTE: CD_ORGAO = '1' é o poder executivo (secretarias); CD_ORGAO = '2' é a Câmara Municipal (poder legislativo); valores negativos ('-1', '-2', '-3') são registros sem classificação. SEMPRE use aspas simples pois é VARCHAR. Para listar apenas secretarias use: CD_ORGAO = '1'",
-        "DS_ORGAO": "Nome do órgão (ex: PREFEITURA MUNICIPAL DE ARUJÁ). ATENÇÃO: quando DS_UO = DS_ORGAO, a linha é um registro genérico do órgão inteiro, não uma secretaria específica — deve ser excluída de rankings por secretaria",
-        "CD_UO": "Código da unidade orçamentária (ex: 02.04.00)",
-        "DS_UO": "Nome da unidade orçamentária/secretaria (ex: SECRETARIA MUNICIPAL DE EDUCAÇÃO). REGRA: para filtrar apenas secretarias reais use: CD_ORGAO = '1' AND DS_UO <> DS_ORGAO",
-        "DS_UO_MNEMONICO": "Nome abreviado da secretaria",
-        "IC_ATIVO": "Indicador de ativo/inativo"
+        "SK_DATA_CALENDARIO": "JOIN com DIM_DATA_CALENDARIO",
+        "SK_UNIDADE_GESTORA": "JOIN com DIM_UNIDADE_GESTORA",
+        "SK_FONTE_RECURSO": "JOIN com DIM_FONTE_RECURSO",
+        "SK_NATUREZA_RECEITA": "JOIN com DIM_NATUREZA_RECEITA — tipo/origem do tributo",
+        "VL_ARRECADACAO_RECEITA": "Arrecadação bruta",
+        "VL_DEDUCOES_ORCAMENTARIA": "Deduções orçamentárias",
+        "VL_DEDUCOES_FUNDEB": "Deduções para o FUNDEB",
+        "VL_DEDUCOES_TRANSF_CONST_LEGAIS": "Deduções de transferências constitucionais/legais",
+        "VL_DEDUCOES_TRANSF_CONST_LEGAIS_MUNICIPIOS": "Deduções de transferências a municípios",
+        "VL_DEDUCOES_RENUNCIA": "Deduções por renúncia de receita",
+        "VL_OUTRAS_DEDUCOES_RECEITA_REALIZADA": "Outras deduções da receita realizada"
       },
       "joins_comuns": [
-        "FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO ON SK_INSTITUCIONAL = SK_INSTITUCIONAL",
-        "FATO_BIORC_EXECUCAO_RECEITA ON SK_INSTITUCIONAL = SK_INSTITUCIONAL",
-        "DIM_BIORC_UNIDADE_GESTORA ON CD_ORGAO = CD_ORGAO"
+        "DIM_DATA_CALENDARIO ON SK_DATA_CALENDARIO = SK_DATA_CALENDARIO",
+        "DIM_UNIDADE_GESTORA ON SK_UNIDADE_GESTORA = SK_UNIDADE_GESTORA",
+        "DIM_FONTE_RECURSO ON SK_FONTE_RECURSO = SK_FONTE_RECURSO",
+        "DIM_NATUREZA_RECEITA ON SK_NATUREZA_RECEITA = SK_NATUREZA_RECEITA"
       ],
       "exemplos_query": [
-        "-- Listar apenas secretarias do executivo (excluindo Câmara e registros genéricos):\nSELECT CD_UO, DS_UO, DS_ORGAO FROM pref_aruja_sp.DIM_BIORC_INSTITUCIONAL\nWHERE CD_ORGAO = '1' AND DS_UO <> DS_ORGAO\nORDER BY CD_UO"
+        "-- Receita bruta, deduções e líquida no ano:\nSELECT\n  SUM(f.VL_ARRECADACAO_RECEITA) AS receita_bruta,\n  SUM(ISNULL(f.VL_DEDUCOES_ORCAMENTARIA,0) + ISNULL(f.VL_DEDUCOES_FUNDEB,0) + ISNULL(f.VL_DEDUCOES_TRANSF_CONST_LEGAIS,0) + ISNULL(f.VL_DEDUCOES_TRANSF_CONST_LEGAIS_MUNICIPIOS,0) + ISNULL(f.VL_DEDUCOES_RENUNCIA,0) + ISNULL(f.VL_OUTRAS_DEDUCOES_RECEITA_REALIZADA,0)) AS total_deducoes,\n  SUM(f.VL_ARRECADACAO_RECEITA) - SUM(ISNULL(f.VL_DEDUCOES_ORCAMENTARIA,0) + ISNULL(f.VL_DEDUCOES_FUNDEB,0) + ISNULL(f.VL_DEDUCOES_TRANSF_CONST_LEGAIS,0) + ISNULL(f.VL_DEDUCOES_TRANSF_CONST_LEGAIS_MUNICIPIOS,0) + ISNULL(f.VL_DEDUCOES_RENUNCIA,0) + ISNULL(f.VL_OUTRAS_DEDUCOES_RECEITA_REALIZADA,0)) AS receita_liquida\nFROM FATO_EXECUCAO_RECEITA f\nJOIN DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = 2025",
+        "-- Arrecadação por categoria econômica da receita:\nSELECT nr.DS_CATEGORIA_ECONOMICA_RECEITA, SUM(f.VL_ARRECADACAO_RECEITA) AS arrecadado\nFROM FATO_EXECUCAO_RECEITA f\nJOIN DIM_NATUREZA_RECEITA nr ON f.SK_NATUREZA_RECEITA = nr.SK_NATUREZA_RECEITA\nJOIN DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = 2025\nGROUP BY nr.DS_CATEGORIA_ECONOMICA_RECEITA\nORDER BY arrecadado DESC"
       ]
     },
     {
-      "tabela": "DIM_BIORC_FORNECEDOR",
-      "descricao": "Cadastro de fornecedores que receberam pagamentos da prefeitura. Inclui CPF/CNPJ e dados bancários.",
-      "conceitos": ["fornecedor", "credor", "empresa", "CPF", "CNPJ", "pagamento"],
+      "tabela": "FATO_REPASSE_FINANCEIRO",
+      "descricao": "Tabela FATO dos repasses financeiros (cotas financeiras) entre unidades gestoras. Contém valores recebidos, a utilizar, utilizados, a solicitar, solicitados e devolvidos, por data, unidade gestora, grupo de programação financeira e fonte de recurso.",
+      "conceitos": ["repasse", "transferencia financeira", "cota financeira"],
+      "colunas_chave": {
+        "SK_DATA_CALENDARIO": "JOIN com DIM_DATA_CALENDARIO",
+        "SK_UNIDADE_GESTORA": "JOIN com DIM_UNIDADE_GESTORA",
+        "SK_GRUPO_PROG_FINANCEIRA": "JOIN com DIM_GRUPO_PROG_FINANCEIRA",
+        "SK_FONTE_RECURSO": "JOIN com DIM_FONTE_RECURSO",
+        "VL_REPASSE_RECEBIDO": "Valor de repasse recebido",
+        "VL_REPASSE_A_UTILIZAR": "Repasse disponível a utilizar",
+        "VL_REPASSE_UTILIZADO": "Repasse já utilizado",
+        "VL_REPASSE_A_SOLICITAR": "Repasse a solicitar",
+        "VL_REPASSE_SOLICITADO": "Repasse solicitado",
+        "VL_REPASSE_DEVOLVIDO": "Repasse devolvido"
+      },
+      "joins_comuns": [
+        "DIM_DATA_CALENDARIO ON SK_DATA_CALENDARIO = SK_DATA_CALENDARIO",
+        "DIM_UNIDADE_GESTORA ON SK_UNIDADE_GESTORA = SK_UNIDADE_GESTORA",
+        "DIM_GRUPO_PROG_FINANCEIRA ON SK_GRUPO_PROG_FINANCEIRA = SK_GRUPO_PROG_FINANCEIRA",
+        "DIM_FONTE_RECURSO ON SK_FONTE_RECURSO = SK_FONTE_RECURSO"
+      ],
+      "exemplos_query": [
+        "-- Repasses recebidos por unidade gestora no ano:\nSELECT TOP 20 u.DS_UNIDADE_GESTORA, SUM(f.VL_REPASSE_RECEBIDO) AS recebido, SUM(f.VL_REPASSE_UTILIZADO) AS utilizado\nFROM FATO_REPASSE_FINANCEIRO f\nJOIN DIM_UNIDADE_GESTORA u ON f.SK_UNIDADE_GESTORA = u.SK_UNIDADE_GESTORA\nJOIN DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = 2025\nGROUP BY u.DS_UNIDADE_GESTORA\nORDER BY recebido DESC"
+      ]
+    },
+    {
+      "tabela": "DIM_DATA_CALENDARIO",
+      "descricao": "Dimensão de tempo. Use para filtrar e agrupar por ano, mês, trimestre, semestre. Faça JOIN pela SK_DATA_CALENDARIO das tabelas FATO.",
+      "conceitos": ["data", "ano", "mes", "trimestre", "semestre"],
+      "colunas_chave": {
+        "SK_DATA_CALENDARIO": "Chave surrogate para JOIN com as FATO",
+        "NO_ANO": "Ano (ex: 2025)",
+        "NO_ANO_MES": "Ano-mês no formato YYYYMM",
+        "NO_MES": "Número do mês (1-12)",
+        "DS_MES": "Nome do mês (ex: Janeiro)",
+        "NO_TRIMESTRE_ANO": "Trimestre do ano (1-4)",
+        "NO_SEMESTRE_ANO": "Semestre do ano (1-2)",
+        "DT_DATA_CALENDARIO": "Data completa (timestamp)"
+      },
+      "joins_comuns": [
+        "FATO_INTERVENCAO_DOTACAO ON SK_DATA_CALENDARIO = SK_DATA_CALENDARIO",
+        "FATO_EXECUCAO_RECEITA ON SK_DATA_CALENDARIO = SK_DATA_CALENDARIO",
+        "FATO_REPASSE_FINANCEIRO ON SK_DATA_CALENDARIO = SK_DATA_CALENDARIO"
+      ],
+      "exemplos_query": []
+    },
+    {
+      "tabela": "DIM_UNIDADE_GESTORA",
+      "descricao": "Cadastro das unidades gestoras (UG) do Estado. Cada UG pertence a um órgão e a uma unidade orçamentária.",
+      "conceitos": ["unidade gestora", "UG"],
+      "colunas_chave": {
+        "SK_UNIDADE_GESTORA": "Chave surrogate para JOIN",
+        "CD_UNIDADE_GESTORA": "Código da unidade gestora",
+        "DS_UNIDADE_GESTORA": "Nome da unidade gestora",
+        "NR_CNPJ_UNIDADE_GESTORA": "CNPJ da unidade gestora",
+        "CD_ORGAO": "Código do órgão ao qual a UG pertence",
+        "CD_UNIDADE_ORCAMENTARIA": "Código da unidade orçamentária"
+      },
+      "joins_comuns": [
+        "FATO_INTERVENCAO_DOTACAO ON SK_UNIDADE_GESTORA = SK_UNIDADE_GESTORA",
+        "FATO_EXECUCAO_RECEITA ON SK_UNIDADE_GESTORA = SK_UNIDADE_GESTORA",
+        "FATO_REPASSE_FINANCEIRO ON SK_UNIDADE_GESTORA = SK_UNIDADE_GESTORA"
+      ],
+      "exemplos_query": []
+    },
+    {
+      "tabela": "DIM_INSTITUCIONAL",
+      "descricao": "Dimensão institucional — poder, tipo de administração, órgão e unidade orçamentária. Use para análises por órgão/secretaria.",
+      "conceitos": ["orgao", "secretaria", "unidade orcamentaria", "poder", "institucional"],
+      "colunas_chave": {
+        "SK_INSTITUCIONAL": "Chave surrogate para JOIN com as FATO",
+        "CD_PODER": "Código do poder",
+        "DS_PODER": "Nome do poder (Executivo, Legislativo, Judiciário)",
+        "DS_TIPO_ADMINISTRACAO": "Tipo de administração (direta, indireta)",
+        "CD_ORGAO": "Código do órgão",
+        "DS_ORGAO": "Nome do órgão (ex: SECRETARIA DE ESTADO DA SAÚDE)",
+        "DS_ORGAO_MNEMONICO": "Sigla/abreviação do órgão",
+        "CD_UO": "Código da unidade orçamentária",
+        "DS_UO": "Nome da unidade orçamentária",
+        "DS_UO_MNEMONICO": "Sigla da unidade orçamentária"
+      },
+      "joins_comuns": [
+        "FATO_INTERVENCAO_DOTACAO ON SK_INSTITUCIONAL = SK_INSTITUCIONAL"
+      ],
+      "exemplos_query": []
+    },
+    {
+      "tabela": "DIM_FONTE_RECURSO",
+      "descricao": "Cadastro das fontes de recurso. Identifica a origem do recurso (tesouro, vinculado, etc.).",
+      "conceitos": ["fonte recurso", "fonte de recurso"],
+      "colunas_chave": {
+        "SK_FONTE_RECURSO": "Chave surrogate para JOIN",
+        "CD_FONTE_RECURSO": "Código da fonte de recurso",
+        "DS_FONTE_RECURSO": "Descrição da fonte de recurso",
+        "CD_GRUPO_FONTE": "Código do grupo da fonte",
+        "DS_GRUPO_FONTE": "Descrição do grupo da fonte",
+        "DS_ESPECIFICACAO_FONTE": "Especificação da fonte",
+        "IC_ATIVO": "Indicador ativo/inativo (CHAR)"
+      },
+      "joins_comuns": [
+        "FATO_INTERVENCAO_DOTACAO ON SK_FONTE_RECURSO = SK_FONTE_RECURSO",
+        "FATO_EXECUCAO_RECEITA ON SK_FONTE_RECURSO = SK_FONTE_RECURSO",
+        "FATO_REPASSE_FINANCEIRO ON SK_FONTE_RECURSO = SK_FONTE_RECURSO"
+      ],
+      "exemplos_query": []
+    },
+    {
+      "tabela": "DIM_NATUREZA_DESPESA",
+      "descricao": "Classificação econômica da despesa — grupo, modalidade, elemento e subelemento. É a dimensão mais granular da despesa.",
+      "conceitos": ["natureza despesa", "elemento despesa", "classificacao economica"],
+      "colunas_chave": {
+        "SK_NATUREZA_DESPESA": "Chave surrogate para JOIN com FATO",
+        "CD_NATUREZA_DESPESA": "Código da natureza da despesa",
+        "DS_NATUREZA_DESPESA": "Descrição da natureza da despesa",
+        "CD_SUB_ELEMENTO_DESPESA": "Código do subelemento",
+        "DS_SUB_ELEMENTO_DESPESA": "Descrição do subelemento"
+      },
+      "joins_comuns": [
+        "FATO_INTERVENCAO_DOTACAO ON SK_NATUREZA_DESPESA = SK_NATUREZA_DESPESA"
+      ],
+      "exemplos_query": []
+    },
+    {
+      "tabela": "DIM_SUBACAO",
+      "descricao": "Dimensão de subação — vincula a despesa ao programa de trabalho, função, subfunção, programa e ação. Contém título, objetivo, esfera orçamentária e status da subação.",
+      "conceitos": ["subacao", "programa de trabalho", "acao", "programa", "funcao"],
+      "colunas_chave": {
+        "SK_SUBACAO": "Chave surrogate para JOIN com FATO",
+        "CD_SUBACAO": "Código da subação",
+        "SG_SUBACAO": "Sigla da subação",
+        "DS_TITULO_SUBACAO": "Título da subação",
+        "DS_OBJETIVO_SUBACAO": "Objetivo da subação",
+        "CD_PROGRAMA_TRABALHO": "Código do programa de trabalho",
+        "DS_ESFERA_ORCAMENTARIA": "Esfera orçamentária (Fiscal, Seguridade)",
+        "DS_STATUS_SUBACAO": "Status da subação"
+      },
+      "joins_comuns": [
+        "FATO_INTERVENCAO_DOTACAO ON SK_SUBACAO = SK_SUBACAO"
+      ],
+      "exemplos_query": []
+    },
+    {
+      "tabela": "DIM_FORNECEDOR",
+      "descricao": "Cadastro de fornecedores/credores que receberam pagamentos do Estado. Inclui CPF/CNPJ e dados bancários.",
+      "conceitos": ["fornecedor", "credor", "empresa", "CPF", "CNPJ"],
       "colunas_chave": {
         "SK_FORNECEDOR": "Chave surrogate para JOIN",
         "CD_FORNECEDOR": "Código interno do fornecedor",
         "DS_FORNECEDOR": "Nome/razão social do fornecedor",
         "CD_CPF_CNPJ_FORNECEDOR": "CPF ou CNPJ do fornecedor",
-        "DS_TIPO_FORNECEDOR": "Tipo (PJ, PF, etc.)"
+        "DS_TIPO_FORNECEDOR": "Tipo de fornecedor",
+        "DS_NATUREZA_FORNECEDOR": "Natureza do fornecedor (PF/PJ)"
       },
       "joins_comuns": [
-        "FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO ON SK_FORNECEDOR = SK_FORNECEDOR",
-        "FATO_BIORC_MENSAL_RESTOS_A_PAGAR ON SK_FORNECEDOR = SK_FORNECEDOR"
+        "FATO_INTERVENCAO_DOTACAO ON SK_FORNECEDOR = SK_FORNECEDOR"
       ],
       "exemplos_query": []
     },
     {
-      "tabela": "DIM_BIORC_NATUREZA_DESPESA",
-      "descricao": "Classificação econômica da despesa — combina grupo, modalidade, elemento e subelemento de despesa. É a dimensão mais granular da despesa.",
-      "conceitos": ["natureza despesa", "elemento despesa", "classificacao economica", "categoria economica"],
+      "tabela": "DIM_EMENDA_PARLAMENTAR",
+      "descricao": "Cadastro de emendas parlamentares vinculadas à despesa. Use para identificar gastos originados de emendas.",
+      "conceitos": ["emenda parlamentar", "emenda", "deputado"],
       "colunas_chave": {
-        "SK_NATUREZA_DESPESA": "Chave surrogate para JOIN com FATO",
-        "CD_NATUREZA_DESPESA": "Código completo da natureza da despesa",
-        "DS_NATUREZA_DESPESA": "Descrição completa",
-        "SK_GRUPO_DESPESA": "Chave para DIM_BIORC_GRUPO_DESPESA",
-        "SK_ELEMENTO_DESPESA": "Chave para DIM_BIORC_ELEMENTO_DESPESA"
+        "SK_EMENDA_PARLAMENTAR": "Chave surrogate para JOIN com FATO",
+        "CD_EMENDA_PARLAMENTAR": "Código da emenda parlamentar",
+        "NM_EMENDA_PARLAMENTAR": "Nome/descrição da emenda parlamentar",
+        "NO_ANO": "Ano da emenda",
+        "FL_STATUS": "Status da emenda"
       },
       "joins_comuns": [
-        "FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO ON SK_NATUREZA_DESPESA = SK_NATUREZA_DESPESA",
-        "DIM_BIORC_GRUPO_DESPESA ON SK_GRUPO_DESPESA = SK_GRUPO_DESPESA",
-        "DIM_BIORC_ELEMENTO_DESPESA ON SK_ELEMENTO_DESPESA = SK_ELEMENTO_DESPESA"
+        "FATO_INTERVENCAO_DOTACAO ON SK_EMENDA_PARLAMENTAR = SK_EMENDA_PARLAMENTAR"
       ],
       "exemplos_query": []
     },
     {
-      "tabela": "DIM_BIORC_GRUPO_DESPESA",
-      "descricao": "Grupos e categorias econômicas de despesa (ex: Pessoal, Juros, Outras Despesas Correntes, Investimentos).",
-      "conceitos": ["grupo despesa", "categoria economica", "pessoal", "investimento", "custeio"],
+      "tabela": "DIM_GRUPO_PROG_FINANCEIRA",
+      "descricao": "Grupo de programação financeira — usado na despesa e nos repasses financeiros para agrupar a movimentação por grupo de programação.",
+      "conceitos": ["grupo programacao financeira", "programacao financeira"],
       "colunas_chave": {
-        "SK_GRUPO_DESPESA": "Chave surrogate",
-        "CD_CATEGORIA": "Código da categoria econômica",
-        "DS_CATEGORIA": "Descrição da categoria (Despesas Correntes, Despesas de Capital)",
-        "CD_GRUPO": "Código do grupo (ex: 1=Pessoal, 3=Outras Desp. Correntes, 4=Investimentos)",
-        "DS_GRUPO": "Descrição do grupo"
+        "SK_GRUPO_PROG_FINANCEIRA": "Chave surrogate para JOIN",
+        "CD_GRUPO": "Código do grupo",
+        "DS_GRUPO": "Descrição do grupo",
+        "DET_GRUPO": "Detalhamento do grupo",
+        "NO_ANO": "Ano de referência"
       },
       "joins_comuns": [
-        "DIM_BIORC_NATUREZA_DESPESA ON SK_GRUPO_DESPESA = SK_GRUPO_DESPESA"
-      ],
-      "exemplos_query": [
-        "-- Despesas por grupo (pessoal, custeio, investimento):\nSELECT TOP 10\n  g.DS_GRUPO,\n  SUM(f.VL_SALDO_MES_PAGO) AS total_pago\nFROM pref_aruja_sp.FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO f\nJOIN pref_aruja_sp.DIM_BIORC_NATUREZA_DESPESA n ON f.SK_NATUREZA_DESPESA = n.SK_NATUREZA_DESPESA\nJOIN pref_aruja_sp.DIM_BIORC_GRUPO_DESPESA g ON n.SK_GRUPO_DESPESA = g.SK_GRUPO_DESPESA\nJOIN pref_aruja_sp.DIM_BIORC_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO_MES = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = YEAR(NOW())\nGROUP BY g.DS_GRUPO\nORDER BY total_pago DESC"
-      ]
-    },
-    {
-      "tabela": "DIM_BIORC_ELEMENTO_DESPESA",
-      "descricao": "Elementos de despesa — detalha o objeto de gasto (ex: Vencimentos, Diárias, Material de Consumo, Serviços de Terceiros).",
-      "conceitos": ["elemento despesa", "objeto gasto", "vencimento", "diaria", "material consumo", "servico terceiros"],
-      "colunas_chave": {
-        "SK_ELEMENTO_DESPESA": "Chave surrogate",
-        "CD_ELEMENTO": "Código do elemento (ex: 01=Venc e Vant Fixas, 14=Diárias, 30=Material Consumo, 39=Outros Serv PJ)",
-        "DS_ELEMENTO_DESPESA": "Descrição do elemento"
-      },
-      "joins_comuns": [
-        "DIM_BIORC_NATUREZA_DESPESA ON SK_ELEMENTO_DESPESA = SK_ELEMENTO_DESPESA"
+        "FATO_INTERVENCAO_DOTACAO ON SK_GRUPO_PROG_FINANCEIRA = SK_GRUPO_PROG_FINANCEIRA",
+        "FATO_REPASSE_FINANCEIRO ON SK_GRUPO_PROG_FINANCEIRA = SK_GRUPO_PROG_FINANCEIRA"
       ],
       "exemplos_query": []
     },
     {
-      "tabela": "DIM_BIORC_FONTE_RECURSO",
-      "descricao": "Fontes de recurso — origem dos recursos financeiros (Tesouro Municipal, Transferências Federais, FUNDEB, SUS, etc.).",
-      "conceitos": ["fonte recurso", "FUNDEB", "SUS", "tesouro", "transferencia federal", "vinculacao recurso"],
+      "tabela": "DIM_NATUREZA_RECEITA",
+      "descricao": "Classificação da natureza da receita — categoria econômica, origem, espécie, rubrica, alínea e subalínea. Use para detalhar a arrecadação por tipo de tributo.",
+      "conceitos": ["natureza receita", "tributo", "categoria receita", "origem receita"],
       "colunas_chave": {
-        "SK_FONTE_RECURSO": "Chave surrogate",
-        "CD_FONTE_RECURSO": "Código da fonte",
-        "DS_FONTE_RECURSO": "Descrição da fonte",
-        "DS_GRUPO_FONTE": "Grupo da fonte (Ordinários, Vinculados, etc.)",
-        "DS_ESPECIFICACAO_FONTE": "Especificação da fonte"
+        "SK_NATUREZA_RECEITA": "Chave surrogate para JOIN com FATO_EXECUCAO_RECEITA",
+        "CD_NATUREZA_RECEITA": "Código da natureza da receita",
+        "DS_NATUREZA_RECEITA": "Descrição completa da natureza da receita",
+        "DS_CATEGORIA_ECONOMICA_RECEITA": "Categoria econômica (ex: Receitas Correntes)",
+        "DS_ORIGEM_RECEITA": "Origem (ex: Receita Tributária)",
+        "DS_ESPECIE_RECEITA": "Espécie (ex: Impostos, Taxas)",
+        "DS_RUBRICA_RECEITA": "Rubrica",
+        "DS_ALINEA_RECEITA": "Alínea (ex: ICMS, IPVA)",
+        "DS_TIPO_RECEITA": "Tipo de receita"
       },
       "joins_comuns": [
-        "FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO ON SK_FONTE_RECURSO = SK_FONTE_RECURSO"
+        "FATO_EXECUCAO_RECEITA ON SK_NATUREZA_RECEITA = SK_NATUREZA_RECEITA"
       ],
       "exemplos_query": []
-    },
-    {
-      "tabela": "DIM_BIORC_UNIDADE_GESTORA",
-      "descricao": "Unidades gestoras — responsáveis pela execução orçamentária dentro das secretarias.",
-      "conceitos": ["unidade gestora", "UG", "gestor"],
-      "colunas_chave": {
-        "SK_UNIDADE_GESTORA": "Chave surrogate",
-        "CD_UNIDADE_GESTORA": "Código da unidade gestora",
-        "DS_UNIDADE_GESTORA": "Nome da unidade gestora",
-        "SK_INSTITUCIONAL": "Vínculo com a secretaria/órgão"
-      },
-      "joins_comuns": [
-        "FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO ON SK_UNIDADE_GESTORA = SK_UNIDADE_GESTORA",
-        "DIM_BIORC_INSTITUCIONAL ON SK_INSTITUCIONAL = SK_INSTITUCIONAL"
-      ],
-      "exemplos_query": []
-    },
-    {
-      "tabela": "DIM_BIORC_DATA_CALENDARIO",
-      "descricao": "Calendário fiscal completo. Usado para filtrar qualquer tabela FATO por período (ano, mês, bimestre, trimestre, semestre).",
-      "conceitos": ["data", "mes", "ano", "periodo", "calendario", "bimestre", "trimestre", "semestre"],
-      "colunas_chave": {
-        "SK_DATA_CALENDARIO": "Chave surrogate — usar para JOIN com SK_DATA_CALENDARIO_MES nas tabelas FATO",
-        "DT_DATA_CALENDARIO": "Data completa",
-        "NO_ANO": "Ano (ex: 2025) — usar YEAR(NOW()) para filtrar ano corrente",
-        "NO_MES": "Número do mês (1-12)",
-        "DS_MES": "Nome do mês por extenso",
-        "NO_ANO_MES": "Ano-mês no formato YYYYMM (ex: 202501)",
-        "NO_TRIMESTRE_ANO": "Trimestre (1-4)",
-        "NO_SEMESTRE_ANO": "Semestre (1-2)"
-      },
-      "joins_comuns": [
-        "FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO ON SK_DATA_CALENDARIO = SK_DATA_CALENDARIO_MES",
-        "FATO_BIORC_MENSAL_RESTOS_A_PAGAR ON SK_DATA_CALENDARIO = SK_DATA_CALENDARIO_MES"
-      ],
-      "exemplos_query": []
-    },
-    {
-      "tabela": "DIM_BIORC_FUNCAO",
-      "descricao": "Funções de governo segundo classificação federal (ex: Saúde, Educação, Urbanismo, Assistência Social).",
-      "conceitos": ["funcao governo", "saude", "educacao", "urbanismo", "assistencia social", "classificacao funcional"],
-      "colunas_chave": {
-        "SK_FUNCAO": "Chave surrogate",
-        "CD_FUNCAO": "Código da função",
-        "DS_FUNCAO": "Nome da função"
-      },
-      "joins_comuns": ["BRIDGE_BIORC_FUNCIONAL_PROGRAMATICA ON SK_FUNCAO = SK_FUNCAO"],
-      "exemplos_query": []
-    },
-    {
-      "tabela": "DIM_BIORC_SUBFUNCAO",
-      "descricao": "Subfunções de governo — detalha a função (ex: Atenção Básica, Ensino Fundamental, Habitação Urbana).",
-      "conceitos": ["subfuncao", "atencao basica", "ensino fundamental", "habitacao urbana"],
-      "colunas_chave": {
-        "SK_SUBFUNCAO": "Chave surrogate",
-        "CD_SUBFUNCAO": "Código da subfunção",
-        "DS_SUBFUNCAO": "Nome da subfunção"
-      },
-      "joins_comuns": ["BRIDGE_BIORC_FUNCIONAL_PROGRAMATICA ON SK_SUBFUNCAO = SK_SUBFUNCAO"],
-      "exemplos_query": []
-    },
-    {
-      "tabela": "DIM_BIORC_PROGRAMA",
-      "descricao": "Programas de governo do PPA/LOA — agrupam as ações programáticas por objetivo.",
-      "conceitos": ["programa governo", "PPA", "LOA", "planejamento"],
-      "colunas_chave": {
-        "SK_PROGRAMA": "Chave surrogate",
-        "CD_PROGRAMA": "Código do programa",
-        "DS_PROGRAMA_EXECUCAO": "Nome do programa na execução",
-        "DS_OBJETIVO_PROGRAMA": "Objetivo do programa"
-      },
-      "joins_comuns": ["BRIDGE_BIORC_FUNCIONAL_PROGRAMATICA ON SK_PROGRAMA = SK_PROGRAMA"],
-      "exemplos_query": []
-    },
-    {
-      "tabela": "DIM_BIORC_ACAO",
-      "descricao": "Ações programáticas — projetos e atividades executados pelas secretarias dentro dos programas.",
-      "conceitos": ["acao programatica", "projeto", "atividade", "programa trabalho"],
-      "colunas_chave": {
-        "SK_ACAO": "Chave surrogate",
-        "CD_ACAO": "Código da ação",
-        "DS_ACAO_EXECUCAO": "Descrição da ação",
-        "DS_TIPO_ACAO": "Tipo (Projeto, Atividade, Operação Especial)"
-      },
-      "joins_comuns": ["BRIDGE_BIORC_FUNCIONAL_PROGRAMATICA ON SK_ACAO = SK_ACAO"],
-      "exemplos_query": []
-    },
-    {
-      "tabela": "DIM_BIORC_MODALIDADE_DESPESA",
-      "descricao": "Modalidade de aplicação — indica se a aplicação é direta ou por transferência (a outro ente, consórcio, entidade privada, etc.).",
-      "conceitos": ["modalidade aplicacao", "transferencia", "aplicacao direta", "convenio"],
-      "colunas_chave": {
-        "SK_MODALIDADE_DESPESA": "Chave surrogate",
-        "CD_MODALIDADE": "Código (ex: 90=Aplicação Direta, 40=Transferências a Municípios)",
-        "DS_MODALIDADE": "Descrição da modalidade"
-      },
-      "joins_comuns": ["DIM_BIORC_NATUREZA_DESPESA ON SK_MODALIDADE_DESPESA = SK_MODALIDADE_DESPESA"],
-      "exemplos_query": []
-    },
-    {
-      "tabela": "FATO_BIORC_EXECUCAO_RECEITA",
-      "descricao": "Execução da receita orçamentária — arrecadação efetiva por secretaria, fonte de recurso e natureza da receita.",
-      "conceitos": ["receita", "arrecadacao", "execucao receita", "ISS", "IPTU", "transferencias"],
-      "colunas_chave": {
-        "SK_DATA_CALENDARIO_ANO": "Chave para DIM_BIORC_DATA_CALENDARIO — filtrar por ano",
-        "SK_INSTITUCIONAL": "Secretaria responsável pela receita",
-        "SK_FONTE_RECURSO": "Fonte do recurso",
-        "SK_NATUREZA_RECEITA": "Natureza da receita (tributos, transferências, etc.)",
-        "VL_ARRECADACAO_RECEITA": "Valor arrecadado",
-        "VL_DEDUCOES_ORCAMENTARIA": "Deduções sobre a receita"
-      },
-      "joins_comuns": [
-        "DIM_BIORC_INSTITUCIONAL ON SK_INSTITUCIONAL = SK_INSTITUCIONAL",
-        "DIM_BIORC_DATA_CALENDARIO ON SK_DATA_CALENDARIO_ANO = SK_DATA_CALENDARIO",
-        "DIM_BIORC_FONTE_RECURSO ON SK_FONTE_RECURSO = SK_FONTE_RECURSO"
-      ],
-      "exemplos_query": [
-        "-- Total de receita arrecadada por ano:\nSELECT\n  d.NO_ANO,\n  SUM(r.VL_ARRECADACAO_RECEITA) AS total_arrecadado\nFROM pref_aruja_sp.FATO_BIORC_EXECUCAO_RECEITA r\nJOIN pref_aruja_sp.DIM_BIORC_DATA_CALENDARIO d ON r.SK_DATA_CALENDARIO_ANO = d.SK_DATA_CALENDARIO\nGROUP BY d.NO_ANO\nORDER BY d.NO_ANO DESC"
-      ]
-    },
-    {
-      "tabela": "FATO_BIORC_MENSAL_RESTOS_A_PAGAR",
-      "descricao": "Restos a pagar — despesas empenhadas em exercícios anteriores e ainda não pagas. Separados em processados (liquidados) e não-processados.",
-      "conceitos": ["restos a pagar", "RAP", "divida anterior", "exercicio anterior", "inadimplencia"],
-      "colunas_chave": {
-        "NR_ANO_EMPENHO": "Ano do empenho original",
-        "VL_RAP_PROCESSADO_INSCRITO": "RAP processado inscrito",
-        "VL_RAP_PROCESSADO_PAGO": "RAP processado pago",
-        "VL_RAP_PROCESSADO_CANCELADO": "RAP processado cancelado",
-        "VL_RAP_NAO_PROCESSADO_INSCRITO": "RAP não-processado inscrito",
-        "VL_RAP_NAO_PROCESSADO_PAGO": "RAP não-processado pago"
-      },
-      "joins_comuns": [
-        "DIM_BIORC_DATA_CALENDARIO ON SK_DATA_CALENDARIO_MES = SK_DATA_CALENDARIO",
-        "DIM_BIORC_FORNECEDOR ON SK_FORNECEDOR = SK_FORNECEDOR",
-        "DIM_BIORC_NATUREZA_DESPESA ON SK_NATUREZA_DESPESA = SK_NATUREZA_DESPESA"
-      ],
-      "exemplos_query": []
-    },
-    {
-      "tabela": "FATO_BIORC_ELABORACAO_ORCAMENTO",
-      "descricao": "Orçamento elaborado (LOA) — dotações aprovadas por lei para cada secretaria, ação e natureza de despesa.",
-      "conceitos": ["orcamento", "LOA", "dotacao aprovada", "lei orcamentaria", "previsao despesa"],
-      "colunas_chave": {
-        "VL_PROJ_LEI": "Valor do projeto de lei enviado à câmara",
-        "VL_ORC_APROV_LEI": "Valor aprovado na Lei Orçamentária Anual",
-        "VL_EMENDA": "Valor de emendas aprovadas"
-      },
-      "joins_comuns": [
-        "DIM_BIORC_INSTITUCIONAL ON SK_INSTITUCIONAL_EXECUCAO = SK_INSTITUCIONAL",
-        "DIM_BIORC_DATA_CALENDARIO ON SK_DATA_CALENDARIO_ANO = SK_DATA_CALENDARIO"
-      ],
-      "exemplos_query": [
-        "-- Orçamento aprovado por secretaria no ano:\nSELECT TOP 20\n  i.DS_UO AS secretaria,\n  SUM(o.VL_ORC_APROV_LEI) AS orcamento_aprovado\nFROM pref_aruja_sp.FATO_BIORC_ELABORACAO_ORCAMENTO o\nJOIN pref_aruja_sp.DIM_BIORC_INSTITUCIONAL i ON o.SK_INSTITUCIONAL_EXECUCAO = i.SK_INSTITUCIONAL\nJOIN pref_aruja_sp.DIM_BIORC_DATA_CALENDARIO d ON o.SK_DATA_CALENDARIO_ANO = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = YEAR(NOW())\nGROUP BY i.DS_UO\nORDER BY orcamento_aprovado DESC"
-      ]
-    },
-    {
-      "tabela": "FATO_BIORC_ALTERACAO_ORCAMENTARIA_DESPESA",
-      "descricao": "Alterações orçamentárias — suplementações e reduções de dotação ao longo do exercício.",
-      "conceitos": ["suplementacao", "reducao orcamentaria", "credito adicional", "alteracao orcamento"],
-      "colunas_chave": {
-        "VL_ALTERACAOORCAMENTARIA": "Valor da alteração (positivo=suplementação, negativo=redução)"
-      },
-      "joins_comuns": [
-        "DIM_BIORC_INSTITUCIONAL ON SK_INSTITUCIONAL = SK_INSTITUCIONAL",
-        "DIM_BIORC_DATA_CALENDARIO ON SK_DATA_CALENDARIO_ANO = SK_DATA_CALENDARIO"
-      ],
-      "exemplos_query": []
-    },
-    {
-      "tabela": "FATO_BIORC_SUPRIMENTO_FINANCEIRO_DESPESA",
-      "descricao": "Suprimentos financeiros (adiantamentos) — recursos entregues a servidores para despesas urgentes ou de pequena monta.",
-      "conceitos": ["suprimento financeiro", "adiantamento", "fundo fixo", "despesa urgente"],
-      "colunas_chave": {
-        "SK_FORNECEDOR": "Fornecedor/credor do suprimento",
-        "VL_SUPRIMENTO_FINANCEIRO": "Valor do suprimento",
-        "CD_EMPENHO": "Número do empenho",
-        "DS_SUPRIMENTO FINANCEIRO": "Descrição do suprimento"
-      },
-      "joins_comuns": [
-        "DIM_BIORC_FORNECEDOR ON SK_FORNECEDOR = SK_FORNECEDOR"
-      ],
-      "exemplos_query": []
-    },
-    {
-      "tabela": "BRIDGE_BIORC_FUNCIONAL_PROGRAMATICA",
-      "descricao": "Tabela ponte que combina função, subfunção, programa e ação formando a classificação funcional-programática completa.",
-      "conceitos": ["funcional programatica", "programa trabalho", "funcao subfuncao programa acao"],
-      "colunas_chave": {
-        "SK_FUNCIONAL_PROGRAMATICA": "Chave usada nas tabelas FATO",
-        "SK_FUNCAO": "Chave para DIM_BIORC_FUNCAO",
-        "SK_SUBFUNCAO": "Chave para DIM_BIORC_SUBFUNCAO",
-        "SK_PROGRAMA": "Chave para DIM_BIORC_PROGRAMA",
-        "SK_ACAO": "Chave para DIM_BIORC_ACAO"
-      },
-      "joins_comuns": [
-        "FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO ON SK_FUNCIONAL_PROGRAMATICA = SK_FUNCIONAL_PROGRAMATICA",
-        "DIM_BIORC_FUNCAO ON SK_FUNCAO = SK_FUNCAO",
-        "DIM_BIORC_SUBFUNCAO ON SK_SUBFUNCAO = SK_SUBFUNCAO",
-        "DIM_BIORC_PROGRAMA ON SK_PROGRAMA = SK_PROGRAMA",
-        "DIM_BIORC_ACAO ON SK_ACAO = SK_ACAO"
-      ],
-      "exemplos_query": [
-        "-- Despesas por função de governo (saúde, educação, etc.):\nSELECT TOP 10\n  func.DS_FUNCAO,\n  SUM(f.VL_SALDO_MES_PAGO) AS total_pago\nFROM pref_aruja_sp.FATO_BIORC_MENSAL_INTERVENCAO_DOTACAO f\nJOIN pref_aruja_sp.BRIDGE_BIORC_FUNCIONAL_PROGRAMATICA b ON f.SK_FUNCIONAL_PROGRAMATICA = b.SK_FUNCIONAL_PROGRAMATICA\nJOIN pref_aruja_sp.DIM_BIORC_FUNCAO func ON b.SK_FUNCAO = func.SK_FUNCAO\nJOIN pref_aruja_sp.DIM_BIORC_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO_MES = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = 2025\nGROUP BY func.DS_FUNCAO\nORDER BY total_pago DESC"
-      ]
-    },
-    {
-      "tabela": "PREFEITURA_IPTU_LANCADO",
-      "descricao": "IPTU lançado por contribuinte e mês. Tabela flat (não segue padrão DIM/FATO) com dados individuais de cada contribuinte — CPF/CNPJ, nome, bairro, CEP e valor lançado mês a mês. Disponível para 2024, 2025 e 2026.",
-      "conceitos": ["contribuinte", "IPTU", "iptu lancado", "bairro", "inadimplencia", "tributo"],
-      "colunas_chave": {
-        "CPF_CNPJ": "CPF ou CNPJ do contribuinte (pode estar mascarado)",
-        "NOME": "Nome do contribuinte/proprietário",
-        "Bairro": "Bairro do imóvel — atenção: nome da coluna com B maiúsculo",
-        "no_cep": "CEP do imóvel",
-        "Tributo": "Tipo do tributo (valor fixo: 'IPTU')",
-        "Ano_Mes": "Período no formato YYYYMM (ex: 202502 = fevereiro 2025) — coluna numérica, use LEFT(CAST(Ano_Mes AS VARCHAR(6)),4) para extrair o ano e RIGHT(CAST(Ano_Mes AS VARCHAR(6)),2) para o mês",
-        "Valor_Lancado": "Valor do IPTU lançado (cobrado) naquele mês para o contribuinte"
-      },
-      "joins_comuns": ["PREFEITURA_IPTU_PAGO ON CPF_CNPJ = CPF_CNPJ AND Ano_Mes = Ano_Mes"],
-      "exemplos_query": [
-        "-- Total de IPTU lançado por ano:\nSELECT LEFT(CAST(Ano_Mes AS VARCHAR(6)),4) AS ano, COUNT(DISTINCT CPF_CNPJ) AS contribuintes, SUM(Valor_Lancado) AS total_lancado\nFROM pref_aruja_sp.PREFEITURA_IPTU_LANCADO\nGROUP BY LEFT(CAST(Ano_Mes AS VARCHAR(6)),4)\nORDER BY ano DESC",
-        "-- Maiores contribuintes IPTU em 2025:\nSELECT TOP 20 CPF_CNPJ, NOME, Bairro, SUM(Valor_Lancado) AS total_lancado\nFROM pref_aruja_sp.PREFEITURA_IPTU_LANCADO\nWHERE LEFT(CAST(Ano_Mes AS VARCHAR(6)),4) = '2025'\nGROUP BY CPF_CNPJ, NOME, Bairro\nORDER BY total_lancado DESC",
-        "-- IPTU lançado por bairro em 2025:\nSELECT Bairro, COUNT(DISTINCT CPF_CNPJ) AS contribuintes, SUM(Valor_Lancado) AS total_lancado\nFROM pref_aruja_sp.PREFEITURA_IPTU_LANCADO\nWHERE LEFT(CAST(Ano_Mes AS VARCHAR(6)),4) = '2025'\nGROUP BY Bairro\nORDER BY total_lancado DESC"
-      ]
-    },
-    {
-      "tabela": "PREFEITURA_IPTU_PAGO",
-      "descricao": "IPTU efetivamente pago por contribuinte e mês. Inclui valor pago, juros, multa e correção monetária. Permite calcular inadimplência cruzando com PREFEITURA_IPTU_LANCADO. Disponível para 2024, 2025 e 2026 (parcial).",
-      "conceitos": ["contribuinte", "IPTU", "iptu pago", "bairro", "inadimplencia", "multa", "juros", "arrecadacao"],
-      "colunas_chave": {
-        "CPF_CNPJ": "CPF ou CNPJ do contribuinte",
-        "NOME": "Nome do contribuinte/proprietário",
-        "Bairro": "Bairro do imóvel — atenção: nome da coluna com B maiúsculo",
-        "CEP": "CEP do imóvel",
-        "Tributo": "Tipo do tributo (valor fixo: 'IPTU')",
-        "Ano_Mes": "Período no formato YYYYMM (ex: 202502 = fevereiro 2025)",
-        "Valor_Pago": "Valor principal do IPTU pago",
-        "Valor_Juros": "Juros por atraso no pagamento",
-        "Valor_Multa": "Multa por inadimplência",
-        "Valor_Correcao": "Correção monetária aplicada"
-      },
-      "joins_comuns": ["PREFEITURA_IPTU_LANCADO ON CPF_CNPJ = CPF_CNPJ AND Ano_Mes = Ano_Mes"],
-      "exemplos_query": [
-        "-- Total pago, juros e multa por ano:\nSELECT LEFT(CAST(Ano_Mes AS VARCHAR(6)),4) AS ano, COUNT(DISTINCT CPF_CNPJ) AS contribuintes, SUM(Valor_Pago) AS total_pago, SUM(Valor_Juros) AS total_juros, SUM(Valor_Multa) AS total_multa\nFROM pref_aruja_sp.PREFEITURA_IPTU_PAGO\nGROUP BY LEFT(CAST(Ano_Mes AS VARCHAR(6)),4)\nORDER BY ano DESC",
-        "-- Inadimplencia 2025: lancado vs pago por bairro:\nSELECT l.Bairro, SUM(l.Valor_Lancado) AS lancado, ISNULL(SUM(p.Valor_Pago),0) AS pago, SUM(l.Valor_Lancado) - ISNULL(SUM(p.Valor_Pago),0) AS inadimplente\nFROM pref_aruja_sp.PREFEITURA_IPTU_LANCADO l\nLEFT JOIN pref_aruja_sp.PREFEITURA_IPTU_PAGO p ON l.CPF_CNPJ = p.CPF_CNPJ AND l.Ano_Mes = p.Ano_Mes\nWHERE LEFT(CAST(l.Ano_Mes AS VARCHAR(6)),4) = '2025'\nGROUP BY l.Bairro\nORDER BY inadimplente DESC"
-      ]
     }
   ]
 }

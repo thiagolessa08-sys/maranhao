@@ -1,41 +1,50 @@
-import { agentQuery, agentSchema } from './agent'
+import { agentSchema } from './agent'
 
 interface TableSchema {
   name: string
   columns: { name: string; type: string; nullable: boolean }[]
 }
 
+// Tabelas do catálogo do DW estadual (Sybase IQ DWPROD16) — sem prefixo de schema.
+// Apenas estas são carregadas no contexto para manter o prompt enxuto.
+export const CATALOG_TABLE_NAMES = [
+  'FATO_INTERVENCAO_DOTACAO',
+  'FATO_EXECUCAO_RECEITA',
+  'FATO_REPASSE_FINANCEIRO',
+  'DIM_DATA_CALENDARIO',
+  'DIM_UNIDADE_GESTORA',
+  'DIM_FONTE_RECURSO',
+  'DIM_NATUREZA_DESPESA',
+  'DIM_SUBACAO',
+  'DIM_INSTITUCIONAL',
+  'DIM_FORNECEDOR',
+  'DIM_EMENDA_PARLAMENTAR',
+  'DIM_GRUPO_PROG_FINANCEIRA',
+  'DIM_NATUREZA_RECEITA',
+]
+
 let cachedContext: string | null = null
-let cachedAt: number = 0
 
 // Carrega uma vez por processo (ou forçado)
 export async function getSchemaContext(force = false): Promise<string> {
   // Usa cache enquanto o processo viver (dados são diários)
   if (cachedContext && !force) return cachedContext
 
+  const start = Date.now()
   const tables = await loadAllSchemas()
   cachedContext = buildPromptContext(tables)
-  cachedAt = Date.now()
-  console.log(`[schema-cache] carregado: ${tables.length} tabelas em ${Date.now() - cachedAt + (Date.now() - cachedAt)}ms`)
+  console.log(`[schema-cache] carregado: ${tables.length} tabelas em ${Date.now() - start}ms`)
   return cachedContext
 }
 
 async function loadAllSchemas(): Promise<TableSchema[]> {
-  // Busca lista de tabelas do schema
-  const listResult = await agentQuery(
-    `SELECT table_name FROM sys.systable WHERE user_name(creator) = 'pref_aruja_sp' AND table_type IN ('BASE', 'VIEW') ORDER BY table_name`,
-    1000
-  )
-
-  const tableNames = listResult.rows.map(r => String(r[0]))
-
-  // Carrega schemas em paralelo (lotes de 10 para não sobrecarregar o agent)
+  // Carrega os schemas das tabelas do catálogo em paralelo (lotes de 5)
   const schemas: TableSchema[] = []
-  for (let i = 0; i < tableNames.length; i += 10) {
-    const batch = tableNames.slice(i, i + 10)
+  for (let i = 0; i < CATALOG_TABLE_NAMES.length; i += 5) {
+    const batch = CATALOG_TABLE_NAMES.slice(i, i + 5)
     const results = await Promise.allSettled(
       batch.map(async name => {
-        const cols = await agentSchema(`pref_aruja_sp.${name}`)
+        const cols = await agentSchema(name)
         return { name, columns: cols } as TableSchema
       })
     )
@@ -48,7 +57,7 @@ async function loadAllSchemas(): Promise<TableSchema[]> {
 }
 
 function buildPromptContext(tables: TableSchema[]): string {
-  const lines: string[] = ['## Schema: pref_aruja_sp\n']
+  const lines: string[] = ['## Schema: DWPROD16 (Sybase IQ)\n']
 
   for (const t of tables) {
     lines.push(`### ${t.name}`)

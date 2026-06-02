@@ -17,7 +17,9 @@ export async function agentHealth(): Promise<{ status: string; db: string }> {
 export async function agentListTables(): Promise<string[]> {
   const res = await fetch(`${AGENT_URL}/tables`, { headers: headers() })
   if (!res.ok) throw new Error(`Failed to list tables: ${res.status}`)
-  return res.json()
+  // O agente retorna { tables: [{ name, type }] } com nomes preenchidos com espaços
+  const data = await res.json() as { tables: Array<{ name: string; type: string }> }
+  return data.tables.map(t => t.name.trim())
 }
 
 export interface ColumnDef {
@@ -31,7 +33,13 @@ export async function agentSchema(table: string): Promise<ColumnDef[]> {
     headers: headers(),
   })
   if (!res.ok) throw new Error(`Failed to get schema for ${table}: ${res.status}`)
-  return res.json()
+  // O agente retorna { table, columns: [{ name, type, width, nullable }] } com padding de espaços
+  const data = await res.json() as { columns: Array<{ name: string; type: string; nullable: boolean }> }
+  return data.columns.map(c => ({
+    name: c.name.trim(),
+    type: c.type.trim(),
+    nullable: c.nullable,
+  }))
 }
 
 export interface QueryResult {

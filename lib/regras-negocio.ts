@@ -1,6 +1,8 @@
 /**
  * Regras de negócio que a IA deve seguir antes de executar qualquer consulta.
  * Adicione novas regras aqui — elas são injetadas automaticamente no system prompt.
+ *
+ * Contexto: DW estadual (Sybase IQ DWPROD16). Tabelas sem prefixo de schema.
  */
 
 export const REGRAS_NEGOCIO = `
@@ -8,68 +10,49 @@ export const REGRAS_NEGOCIO = `
 REGRAS DE NEGÓCIO — OBRIGATÓRIAS
 ══════════════════════════════════════════
 
-## REGRA 1 — RECEITA: sempre mostrar bruta, deduções e líquida
+## REGRA 1 — DESPESA: estágios da execução orçamentária
 
-Toda vez que o usuário perguntar sobre receita (arrecadação, receita total, receita por tributo,
-receita por secretaria, etc.), você DEVE apresentar TRÊS valores no resultado:
+A despesa está em FATO_INTERVENCAO_DOTACAO. Os estágios da execução são colunas de valor distintas:
 
-  1. Receita Bruta     → filtro: CD_TIPO_NATUREZA_RECEITA = 1  (DS = "Receita")
-  2. Deduções          → filtro: CD_TIPO_NATUREZA_RECEITA = 2  (DS = "Dedução")
-  3. Receita Líquida   → Bruta + Deduções
+  • VL_LEI_MAIS_CREDITO        → dotação atualizada (lei orçamentária + créditos adicionais)
+  • VL_SALDO_MES_SUPLEMENTACAO → suplementações no mês
+  • VL_SALDO_MES_REDUCAO       → reduções no mês
+  • VL_SALDO_PRE_EMPENHO       → pré-empenho
+  • VL_SALDO_MES_EMPENHADO     → empenhado
+  • VL_SALDO_MES_LIQUIDADO     → liquidado
+  • VL_SALDO_MES_PAGO          → pago (valor da despesa efetivamente realizada)
 
-ATENÇÃO — REGRAS CRÍTICAS SOBRE OS VALORES:
-  • Os valores de dedução (CD=2) já são armazenados como NEGATIVOS no banco.
-  • Receita Líquida = Bruta + Deduções  (não Bruta - Deduções, pois deduções já são negativas)
-  • Exemplo: bruta R$ 79,9M + deduções R$ -7,1M = líquida R$ 72,8M
-  • NUNCA use SUM(f.VL_ARRECADACAO_RECEITA) sem filtro — existem registros com CD=-1
-    (Não Informado) que inflam o total. Use SEMPRE filtro explícito IN (1, 2).
+Para "quanto foi gasto/pago" use SUM(VL_SALDO_MES_PAGO). Para "quanto foi empenhado",
+SUM(VL_SALDO_MES_EMPENHADO). NUNCA some estágios diferentes como se fossem o mesmo valor.
 
-A tabela de resultado deve sempre ter as três colunas, por exemplo:
-  | secretaria | receita_bruta | deducoes | receita_liquida |
+## REGRA 2 — RECEITA: bruta, deduções e líquida
 
-Join obrigatório para aplicar o filtro:
-  JOIN pref_aruja_sp.DIM_BIORC_TIPO_NATUREZA_RECEITA tn
-    ON f.SK_TIPO_NATUREZA_RECEITA = tn.SK_TIPO_NATUREZA_RECEITA
+A receita está em FATO_EXECUCAO_RECEITA. A arrecadação bruta é VL_ARRECADACAO_RECEITA.
+As deduções ficam em colunas separadas (valores de redução da receita):
 
-Query modelo CORRETA para receita com as três colunas:
-  SELECT
-    SUM(CASE WHEN tn.CD_TIPO_NATUREZA_RECEITA = 1 THEN f.VL_ARRECADACAO_RECEITA ELSE 0 END) AS receita_bruta,
-    SUM(CASE WHEN tn.CD_TIPO_NATUREZA_RECEITA = 2 THEN f.VL_ARRECADACAO_RECEITA ELSE 0 END) AS deducoes,
-    SUM(CASE WHEN tn.CD_TIPO_NATUREZA_RECEITA IN (1, 2) THEN f.VL_ARRECADACAO_RECEITA ELSE 0 END) AS receita_liquida
-  FROM pref_aruja_sp.FATO_BIORC_EXECUCAO_RECEITA f
-  JOIN pref_aruja_sp.DIM_BIORC_TIPO_NATUREZA_RECEITA tn
-    ON f.SK_TIPO_NATUREZA_RECEITA = tn.SK_TIPO_NATUREZA_RECEITA
-  JOIN pref_aruja_sp.DIM_BIORC_DATA_CALENDARIO d
-    ON f.SK_DATA_CALENDARIO_ANO = d.SK_DATA_CALENDARIO
-  WHERE d.NO_ANO = 2025
+  • VL_DEDUCOES_ORCAMENTARIA
+  • VL_DEDUCOES_FUNDEB
+  • VL_DEDUCOES_TRANSF_CONST_LEGAIS
+  • VL_DEDUCOES_TRANSF_CONST_LEGAIS_MUNICIPIOS
+  • VL_DEDUCOES_RENUNCIA
+  • VL_OUTRAS_DEDUCOES_RECEITA_REALIZADA
 
-NUNCA retorne apenas um valor total de receita sem mostrar bruta e líquida separadamente.
+Receita Líquida = VL_ARRECADACAO_RECEITA − (soma de todas as deduções acima).
 
-## REGRA 2 — SINÔNIMOS: arrecadação = receita
+Quando o usuário perguntar sobre receita/arrecadação, mostre a Receita Bruta e, quando
+fizer sentido, também as deduções e a Receita Líquida.
 
-"Arrecadação", "receita", "o que a prefeitura arrecadou", "quanto entrou no caixa" e
-"quanto foi arrecadado" são todos sinônimos — todos se referem à tabela
-FATO_BIORC_EXECUCAO_RECEITA e à coluna VL_ARRECADACAO_RECEITA.
+## REGRA 3 — SINÔNIMOS
 
-Quando o usuário usar qualquer uma dessas palavras, aplique exatamente as mesmas
-regras da REGRA 1 (bruta / deduções / líquida).
+"Arrecadação", "receita", "quanto entrou no caixa", "quanto foi arrecadado" → todos se
+referem a FATO_EXECUCAO_RECEITA / VL_ARRECADACAO_RECEITA.
+"Gasto", "despesa", "quanto foi pago" → FATO_INTERVENCAO_DOTACAO / VL_SALDO_MES_PAGO.
+"Repasse", "transferência financeira" → FATO_REPASSE_FINANCEIRO.
 
-## REGRA 3 — COLUNAS CORRETAS de DIM_BIORC_NATUREZA_RECEITA
+## REGRA 4 — FILTRO POR ANO
 
-A tabela DIM_BIORC_NATUREZA_RECEITA NÃO tem coluna "DS_CATEGORIA_RECEITA".
-Use SEMPRE os nomes exatos abaixo:
-
-  • DS_CATEGORIA_ECONOMICA_RECEITA  → categoria econômica (ex: Receitas Correntes)
-  • DS_ORIGEM_RECEITA               → origem (ex: Receita Tributária)
-  • DS_ESPECIE_RECEITA              → espécie (ex: Impostos, Taxas)
-  • DS_ALINEA_RECEITA               → alínea (ex: IPTU, ISS, ITBI)
-  • DS_SUBALINEA_RECEITA            → subalínea (nível mais detalhado)
-  • DS_RUBRICA_RECEITA              → rubrica
-  • DS_NATUREZA_RECEITA             → descrição completa da natureza
-
-Erros comuns a evitar:
-  ✗ nr.DS_CATEGORIA_RECEITA        → não existe
-  ✗ nr.DS_TIPO_RECEITA             → não existe nessa tabela
-  ✓ nr.DS_CATEGORIA_ECONOMICA_RECEITA  → correto
-  ✓ nr.DS_ESPECIE_RECEITA              → correto
+Filtre por ano/período via JOIN com DIM_DATA_CALENDARIO (coluna NO_ANO). Se o usuário não
+especificar o ano, confirme antes o ano mais recente com dados:
+  SELECT MAX(NO_ANO) FROM DIM_DATA_CALENDARIO
+e use esse valor no filtro (não use YEAR(NOW()), pois o relógio pode estar à frente dos dados).
 `
