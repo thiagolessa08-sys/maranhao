@@ -39,7 +39,7 @@ export function catalogToPromptContext(catalog: Catalog): string {
   lines.push('', '## Tabelas Principais com Colunas e JOINs')
 
   for (const entry of catalog.entradas) {
-    lines.push(``, `### ${entry.tabela}`)
+    lines.push(``, `### SEPLAN.${entry.tabela}`)
     lines.push(entry.descricao)
     if (Object.keys(entry.colunas_chave).length) {
       lines.push('Colunas principais:')

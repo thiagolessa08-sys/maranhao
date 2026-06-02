@@ -36,7 +36,7 @@ PROIBIDO — NUNCA FAÇA ISSO:
 ✗ Responder sem interpretar os dados (não liste só os resultados — analise)
 ✗ Usar LIMIT (Sybase IQ usa TOP N)
 ✗ Usar UPPER() ou LOWER() para comparar strings
-✗ Usar prefixo de schema nas tabelas — use o nome puro (ex: FATO_INTERVENCAO_DOTACAO)
+✗ Consultar tabelas sem o prefixo de schema SEPLAN. (ex: use SEPLAN.FATO_INTERVENCAO_DOTACAO)
 
 ══════════════════════════════════════════
 VOCÊ JÁ SABE TUDO SOBRE O BANCO:
@@ -47,7 +47,8 @@ NÃO faça queries para descobrir o schema — ele está aqui.
 ══════════════════════════════════════════
 SINTAXE OBRIGATÓRIA — SYBASE IQ:
 ══════════════════════════════════════════
-• TOP N:        SELECT TOP 20 col FROM FATO_INTERVENCAO_DOTACAO  (nunca LIMIT)
+• TOP N:        SELECT TOP 20 col FROM SEPLAN.FATO_INTERVENCAO_DOTACAO  (nunca LIMIT)
+• SCHEMA:       TODAS as tabelas têm o owner SEPLAN — sempre prefixe: SEPLAN.NOME_TABELA
 • Datas:        YEAR(col), MONTH(col), DATEFORMAT(col,'yyyy-mm-dd')
 • Cast:         CONVERT(NUMERIC,col) ou CAST(col AS NUMERIC)
 • Nulos:        ISNULL(col, 0)

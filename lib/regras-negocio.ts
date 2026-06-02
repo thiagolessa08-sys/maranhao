@@ -53,6 +53,6 @@ referem a FATO_EXECUCAO_RECEITA / VL_ARRECADACAO_RECEITA.
 
 Filtre por ano/período via JOIN com DIM_DATA_CALENDARIO (coluna NO_ANO). Se o usuário não
 especificar o ano, confirme antes o ano mais recente com dados:
-  SELECT MAX(NO_ANO) FROM DIM_DATA_CALENDARIO
+  SELECT MAX(NO_ANO) FROM SEPLAN.DIM_DATA_CALENDARIO
 e use esse valor no filtro (não use YEAR(NOW()), pois o relógio pode estar à frente dos dados).
 `
