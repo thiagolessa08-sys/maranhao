@@ -28,13 +28,15 @@ const SUGESTOES = [
   'Compare empenho, liquidação e pagamento por secretaria',
 ]
 
+// Paleta oficial da marca Governo do Maranhão
 const CHART_COLORS = [
-  'oklch(0.52 0.20 264)',
-  'oklch(0.62 0.18 240)',
-  'oklch(0.78 0.13 75)',
-  'oklch(0.72 0.14 25)',
-  'oklch(0.58 0.10 240)',
-  'oklch(0.60 0.12 300)',
+  '#163F8C', // azul
+  '#009640', // verde
+  '#E30613', // vermelho
+  '#F18A00', // laranja
+  '#FCD116', // amarelo
+  '#00ADC6', // ciano/teal
+  '#5CB85C', // verde-claro
 ]
 
 const CSS = `
