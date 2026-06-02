@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Prefeitura Arujá — Analytics',
-  description: 'Sistema de análise de dados municipais',
+  title: 'Governo do Maranhão — Analytics',
+  description: 'Sistema de análise de dados do Estado do Maranhão',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

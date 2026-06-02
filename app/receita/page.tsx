@@ -298,15 +298,7 @@ export default function ReceitaPage() {
       {/* ── SIDEBAR ── */}
       <aside className="krec-sidebar">
         <div className="krec-brand">
-          <div className="krec-brand-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M3 22V10l9-7 9 7v12H3z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
-              <path d="M9 22v-6h6v6" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <div className="krec-brand-text">
-            <div className="t1">Analytics Municipal</div>
-          </div>
+          <img src="/logo-maranhao.png" alt="Governo do Maranhão" style={{ width: '100%', height: 'auto', background: '#fff', borderRadius: 10, padding: '8px 10px', display: 'block' }} />
         </div>
 
         <div>
