@@ -335,7 +335,7 @@ export default function OrcamentoPage() {
         <div style={{ marginTop: 'auto', background: 'var(--green-ink)', borderRadius: '16px', padding: '16px', color: '#fff', position: 'relative', overflow: 'hidden' }}>
           <div style={{ fontSize: '11px', fontWeight: 700, opacity: .7, letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: '6px' }}>Dashboard</div>
           <div style={{ fontSize: '13.5px', fontWeight: 700, lineHeight: 1.4, marginBottom: '6px' }}>Orçamento Governo</div>
-          <div style={{ fontSize: '11.5px', opacity: .7, lineHeight: 1.5 }}>Execução orçamentária do Governo do Maranhão · dados mock</div>
+          <div style={{ fontSize: '11.5px', opacity: .7, lineHeight: 1.5 }}>Execução orçamentária do Governo do Maranhão · DWPROD16</div>
         </div>
       </aside>
 

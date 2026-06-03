@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
+import { agentQuery } from '@/lib/agent'
 
 interface DadosOrcamento {
   kpis: {
@@ -13,119 +14,19 @@ interface DadosOrcamento {
   categorias: Array<{ nome: string; valor: number; pct: number }>
 }
 
-const MOCK: Record<number, DadosOrcamento> = {
-  2025: {
+const MES_ABREV = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+const n = (v: unknown) => { const x = Number(v); return Number.isFinite(x) ? x : 0 }
+const pct = (a: number, b: number) => (b > 0 ? +(((a / b) * 100)).toFixed(1) : 0)
+
+function vazio(): DadosOrcamento {
+  return {
     kpis: {
-      arrecadado: { valor: 655300000, meta_pct: 99.1 },
-      empenhado:  { valor: 196400000, receita_pct: 30.0 },
-      liquidado:  { valor: 42600000,  empenhado_pct: 21.7 },
-      pago:       { valor: 33200000,  liquidado_pct: 78.0 },
+      arrecadado: { valor: 0, meta_pct: 0 }, empenhado: { valor: 0, receita_pct: 0 },
+      liquidado: { valor: 0, empenhado_pct: 0 }, pago: { valor: 0, liquidado_pct: 0 },
     },
-    mensal: [
-      { mes: 'Jan', arrecadado: 76000000 }, { mes: 'Fev', arrecadado: 58000000 },
-      { mes: 'Mar', arrecadado: 62000000 }, { mes: 'Abr', arrecadado: 54000000 },
-      { mes: 'Mai', arrecadado: 57000000 }, { mes: 'Jun', arrecadado: 55000000 },
-      { mes: 'Jul', arrecadado: 52000000 }, { mes: 'Ago', arrecadado: 48000000 },
-      { mes: 'Set', arrecadado: 51000000 }, { mes: 'Out', arrecadado: 53000000 },
-      { mes: 'Nov', arrecadado: 59000000 }, { mes: 'Dez', arrecadado: 70000000 },
-    ],
-    funcoes: [
-      { nome: 'Saúde',         pago: 68000000 },
-      { nome: 'Educação',      pago: 45000000 },
-      { nome: 'Administração', pago: 35000000 },
-      { nome: 'Urbanismo',     pago: 30000000 },
-      { nome: 'Energia',       pago: 5000000  },
-      { nome: 'Transporte',    pago: 5000000  },
-    ],
-    categorias: [
-      { nome: 'Receitas Correntes',  valor: 617000000, pct: 94 },
-      { nome: 'Receitas de Capital', valor: 38300000,  pct: 6  },
-    ],
-  },
-  2024: {
-    kpis: {
-      arrecadado: { valor: 598700000, meta_pct: 97.3 },
-      empenhado:  { valor: 182100000, receita_pct: 30.4 },
-      liquidado:  { valor: 39800000,  empenhado_pct: 21.9 },
-      pago:       { valor: 31200000,  liquidado_pct: 78.4 },
-    },
-    mensal: [
-      { mes: 'Jan', arrecadado: 68000000 }, { mes: 'Fev', arrecadado: 52000000 },
-      { mes: 'Mar', arrecadado: 55000000 }, { mes: 'Abr', arrecadado: 48000000 },
-      { mes: 'Mai', arrecadado: 51000000 }, { mes: 'Jun', arrecadado: 49000000 },
-      { mes: 'Jul', arrecadado: 47000000 }, { mes: 'Ago', arrecadado: 44000000 },
-      { mes: 'Set', arrecadado: 46000000 }, { mes: 'Out', arrecadado: 49000000 },
-      { mes: 'Nov', arrecadado: 53000000 }, { mes: 'Dez', arrecadado: 63000000 },
-    ],
-    funcoes: [
-      { nome: 'Saúde',         pago: 62000000 },
-      { nome: 'Educação',      pago: 41000000 },
-      { nome: 'Administração', pago: 32000000 },
-      { nome: 'Urbanismo',     pago: 27000000 },
-      { nome: 'Energia',       pago: 4500000  },
-      { nome: 'Transporte',    pago: 4200000  },
-    ],
-    categorias: [
-      { nome: 'Receitas Correntes',  valor: 563000000, pct: 94 },
-      { nome: 'Receitas de Capital', valor: 35700000,  pct: 6  },
-    ],
-  },
-  2023: {
-    kpis: {
-      arrecadado: { valor: 541200000, meta_pct: 95.8 },
-      empenhado:  { valor: 165000000, receita_pct: 30.5 },
-      liquidado:  { valor: 36100000,  empenhado_pct: 21.9 },
-      pago:       { valor: 28400000,  liquidado_pct: 78.7 },
-    },
-    mensal: [
-      { mes: 'Jan', arrecadado: 61000000 }, { mes: 'Fev', arrecadado: 47000000 },
-      { mes: 'Mar', arrecadado: 49000000 }, { mes: 'Abr', arrecadado: 43000000 },
-      { mes: 'Mai', arrecadado: 46000000 }, { mes: 'Jun', arrecadado: 44000000 },
-      { mes: 'Jul', arrecadado: 42000000 }, { mes: 'Ago', arrecadado: 40000000 },
-      { mes: 'Set', arrecadado: 41000000 }, { mes: 'Out', arrecadado: 44000000 },
-      { mes: 'Nov', arrecadado: 48000000 }, { mes: 'Dez', arrecadado: 57000000 },
-    ],
-    funcoes: [
-      { nome: 'Saúde',         pago: 57000000 },
-      { nome: 'Educação',      pago: 37000000 },
-      { nome: 'Administração', pago: 28000000 },
-      { nome: 'Urbanismo',     pago: 23000000 },
-      { nome: 'Energia',       pago: 4000000  },
-      { nome: 'Transporte',    pago: 3800000  },
-    ],
-    categorias: [
-      { nome: 'Receitas Correntes',  valor: 509000000, pct: 94 },
-      { nome: 'Receitas de Capital', valor: 32200000,  pct: 6  },
-    ],
-  },
-  2026: {
-    kpis: {
-      arrecadado: { valor: 198400000, meta_pct: 30.2 },
-      empenhado:  { valor: 54200000,  receita_pct: 27.3 },
-      liquidado:  { valor: 11800000,  empenhado_pct: 21.8 },
-      pago:       { valor: 9200000,   liquidado_pct: 78.0 },
-    },
-    mensal: [
-      { mes: 'Jan', arrecadado: 82000000 }, { mes: 'Fev', arrecadado: 64000000 },
-      { mes: 'Mar', arrecadado: 52400000 }, { mes: 'Abr', arrecadado: 0 },
-      { mes: 'Mai', arrecadado: 0 },        { mes: 'Jun', arrecadado: 0 },
-      { mes: 'Jul', arrecadado: 0 },        { mes: 'Ago', arrecadado: 0 },
-      { mes: 'Set', arrecadado: 0 },        { mes: 'Out', arrecadado: 0 },
-      { mes: 'Nov', arrecadado: 0 },        { mes: 'Dez', arrecadado: 0 },
-    ],
-    funcoes: [
-      { nome: 'Saúde',         pago: 18000000 },
-      { nome: 'Educação',      pago: 12000000 },
-      { nome: 'Administração', pago: 9000000  },
-      { nome: 'Urbanismo',     pago: 8000000  },
-      { nome: 'Energia',       pago: 1200000  },
-      { nome: 'Transporte',    pago: 1100000  },
-    ],
-    categorias: [
-      { nome: 'Receitas Correntes',  valor: 186700000, pct: 94 },
-      { nome: 'Receitas de Capital', valor: 11700000,  pct: 6  },
-    ],
-  },
+    mensal: MES_ABREV.slice(1).map(m => ({ mes: m, arrecadado: 0 })),
+    funcoes: [], categorias: [],
+  }
 }
 
 export async function GET(req: NextRequest) {
@@ -134,6 +35,68 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url)
   const ano = parseInt(searchParams.get('ano') ?? '2025')
-  const dados = MOCK[ano] ?? MOCK[2025]
-  return NextResponse.json(dados)
+
+  try {
+    // Receita do ano (atual e anterior) + série mensal
+    const rec = await agentQuery(`
+      SELECT d.NO_ANO ano, d.NO_MES mes, SUM(ISNULL(f.VL_ARRECADACAO_RECEITA,0)) v
+      FROM SEPLAN.FATO_EXECUCAO_RECEITA f
+      JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
+      WHERE d.NO_ANO IN (${ano}, ${ano - 1})
+      GROUP BY d.NO_ANO, d.NO_MES`, 60)
+    const mensalArr = Array(12).fill(0)
+    let arrecadado = 0, arrecadadoPrev = 0
+    for (const r of rec.rows) {
+      const a = n(r[0]); const m = n(r[1]); const v = n(r[2])
+      if (a === ano) { arrecadado += v; if (m >= 1 && m <= 12) mensalArr[m - 1] = v }
+      else if (a === ano - 1) arrecadadoPrev += v
+    }
+
+    // Despesa do ano (estágios)
+    const desp = await agentQuery(`
+      SELECT
+        SUM(ISNULL(f.VL_SALDO_MES_EMPENHADO,0)) empenhado,
+        SUM(ISNULL(f.VL_SALDO_MES_LIQUIDADO,0)) liquidado,
+        SUM(ISNULL(f.VL_SALDO_MES_PAGO,0)) pago
+      FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
+      JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
+      WHERE d.NO_ANO = ${ano}`, 5)
+    const dr = desp.rows[0] ?? []
+    const empenhado = n(dr[0]), liquidado = n(dr[1]), pago = n(dr[2])
+
+    // Despesa paga por órgão
+    const fun = await agentQuery(`
+      SELECT TOP 6 i.DS_ORGAO nome, SUM(ISNULL(f.VL_SALDO_MES_PAGO,0)) pago
+      FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
+      JOIN SEPLAN.DIM_INSTITUCIONAL i ON f.SK_INSTITUCIONAL = i.SK_INSTITUCIONAL
+      JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
+      WHERE d.NO_ANO = ${ano}
+      GROUP BY i.DS_ORGAO ORDER BY pago DESC`, 20)
+
+    // Receita por categoria econômica
+    const cat = await agentQuery(`
+      SELECT nr.DS_CATEGORIA_ECONOMICA_RECEITA nome, SUM(ISNULL(f.VL_ARRECADACAO_RECEITA,0)) v
+      FROM SEPLAN.FATO_EXECUCAO_RECEITA f
+      JOIN SEPLAN.DIM_NATUREZA_RECEITA nr ON f.SK_NATUREZA_RECEITA = nr.SK_NATUREZA_RECEITA
+      JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
+      WHERE d.NO_ANO = ${ano}
+      GROUP BY nr.DS_CATEGORIA_ECONOMICA_RECEITA ORDER BY v DESC`, 20)
+    const totCat = cat.rows.reduce((s, r) => s + n(r[1]), 0) || 1
+
+    const dados: DadosOrcamento = {
+      kpis: {
+        arrecadado: { valor: arrecadado, meta_pct: pct(arrecadado, arrecadadoPrev) },
+        empenhado:  { valor: empenhado, receita_pct: pct(empenhado, arrecadado) },
+        liquidado:  { valor: liquidado, empenhado_pct: pct(liquidado, empenhado) },
+        pago:       { valor: pago, liquidado_pct: pct(pago, liquidado) },
+      },
+      mensal: mensalArr.map((v, i) => ({ mes: MES_ABREV[i + 1], arrecadado: v })),
+      funcoes: fun.rows.map(r => ({ nome: String(r[0] ?? '').trim(), pago: n(r[1]) })),
+      categorias: cat.rows.map(r => ({ nome: String(r[0] ?? '').trim() || 'Não informado', valor: n(r[1]), pct: Math.round((n(r[1]) / totCat) * 100) })),
+    }
+    return NextResponse.json(dados)
+  } catch (e) {
+    console.error('[api/orcamento]', e)
+    return NextResponse.json(vazio())
+  }
 }

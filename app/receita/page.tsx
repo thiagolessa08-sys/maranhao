@@ -334,7 +334,7 @@ export default function ReceitaPage() {
         <div style={{ marginTop: 'auto', background: 'var(--green-ink)', borderRadius: '16px', padding: '16px', color: '#fff', position: 'relative', overflow: 'hidden' }}>
           <div style={{ fontSize: '11px', fontWeight: 700, opacity: .7, letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: '6px' }}>Dashboard</div>
           <div style={{ fontSize: '13.5px', fontWeight: 700, lineHeight: 1.4, marginBottom: '6px' }}>Receitas do Governo</div>
-          <div style={{ fontSize: '11.5px', opacity: .7, lineHeight: 1.5 }}>Arrecadação e previsão · dados mock</div>
+          <div style={{ fontSize: '11.5px', opacity: .7, lineHeight: 1.5 }}>Arrecadação realizada · DWPROD16</div>
         </div>
       </aside>
 

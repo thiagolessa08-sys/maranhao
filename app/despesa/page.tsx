@@ -339,7 +339,7 @@ export default function DespesaPage() {
         <div style={{ marginTop: 'auto', background: 'var(--green-ink)', borderRadius: '16px', padding: '16px', color: '#fff' }}>
           <div style={{ fontSize: '11px', fontWeight: 700, opacity: .7, letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: '6px' }}>Dashboard</div>
           <div style={{ fontSize: '13.5px', fontWeight: 700, lineHeight: 1.4, marginBottom: '6px' }}>Despesas do Governo</div>
-          <div style={{ fontSize: '11.5px', opacity: .7, lineHeight: 1.5 }}>Execução orçamentária · dados mock</div>
+          <div style={{ fontSize: '11.5px', opacity: .7, lineHeight: 1.5 }}>Execução orçamentária · DWPROD16</div>
         </div>
       </aside>
 
