@@ -49,6 +49,9 @@ SINTAXE OBRIGATÓRIA — SYBASE IQ:
 ══════════════════════════════════════════
 • TOP N:        SELECT TOP 20 col FROM SEPLAN.FATO_INTERVENCAO_DOTACAO  (nunca LIMIT)
 • SCHEMA:       TODAS as tabelas têm o owner SEPLAN — sempre prefixe: SEPLAN.NOME_TABELA
+• ASPAS:        O conector NÃO aceita literais de texto entre aspas simples ('...') — a query falha.
+                Para comparar colunas CHAR use CHAR(codigo_ascii). Ex.: IC_CONVERSAO IN (CHAR(67),CHAR(72)) em vez de ('C','H').
+                Prefira filtrar/agrupar por colunas numéricas (códigos CD_*, SK_*, NO_ANO) e mostrar os nomes (DS_*) no SELECT.
 • Datas:        YEAR(col), MONTH(col), DATEFORMAT(col,'yyyy-mm-dd')
 • Cast:         CONVERT(NUMERIC,col) ou CAST(col AS NUMERIC)
 • Nulos:        ISNULL(col, 0)

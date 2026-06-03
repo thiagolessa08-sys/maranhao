@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
         SUM(ISNULL(f.VL_SALDO_MES_PAGO,0)) pago
       FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
-      WHERE d.NO_ANO IN (${ano}, ${ano - 1})
+      WHERE d.NO_ANO IN (${ano}, ${ano - 1}) AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))
       GROUP BY d.NO_ANO`, 10)
 
     const byAno: Record<number, Record<string, number>> = {}
@@ -70,7 +70,7 @@ export async function GET(req: NextRequest) {
       FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
       JOIN SEPLAN.DIM_INSTITUCIONAL i ON f.SK_INSTITUCIONAL = i.SK_INSTITUCIONAL
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
-      WHERE d.NO_ANO = ${ano}
+      WHERE d.NO_ANO = ${ano} AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))
       GROUP BY i.DS_ORGAO ORDER BY v DESC`, 20)
 
     // Elementos de despesa: dotação x empenhado
@@ -81,7 +81,7 @@ export async function GET(req: NextRequest) {
       FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
       JOIN SEPLAN.DIM_NATUREZA_DESPESA nd ON f.SK_NATUREZA_DESPESA = nd.SK_NATUREZA_DESPESA
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
-      WHERE d.NO_ANO = ${ano}
+      WHERE d.NO_ANO = ${ano} AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))
       GROUP BY nd.DS_NATUREZA_DESPESA ORDER BY empenhado DESC`, 20)
 
     // Despesa paga por grupo de fonte (categorias) e por fonte (modalidades)
@@ -90,7 +90,7 @@ export async function GET(req: NextRequest) {
       FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
       JOIN SEPLAN.DIM_FONTE_RECURSO fr ON f.SK_FONTE_RECURSO = fr.SK_FONTE_RECURSO
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
-      WHERE d.NO_ANO = ${ano}
+      WHERE d.NO_ANO = ${ano} AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))
       GROUP BY fr.DS_GRUPO_FONTE ORDER BY v DESC`, 20)
 
     const fontes = await agentQuery(`
@@ -98,7 +98,7 @@ export async function GET(req: NextRequest) {
       FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
       JOIN SEPLAN.DIM_FONTE_RECURSO fr ON f.SK_FONTE_RECURSO = fr.SK_FONTE_RECURSO
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
-      WHERE d.NO_ANO = ${ano}
+      WHERE d.NO_ANO = ${ano} AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))
       GROUP BY fr.DS_FONTE_RECURSO ORDER BY v DESC`, 20)
 
     const totGrupos = grupos.rows.reduce((s, r) => s + n(r[1]), 0) || 1

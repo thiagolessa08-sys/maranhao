@@ -10,6 +10,17 @@ export const REGRAS_NEGOCIO = `
 REGRAS DE NEGÓCIO — OBRIGATÓRIAS
 ══════════════════════════════════════════
 
+## REGRA 0 — DESPESA: filtro OBRIGATÓRIO de conversão
+
+SEMPRE que consultar FATO_INTERVENCAO_DOTACAO, inclua no WHERE o filtro de conversão
+IC_CONVERSAO IN ('C','H'). Sem ele os valores de despesa ficam incorretos.
+Obrigatório em TODA query que use FATO_INTERVENCAO_DOTACAO (dotação, empenho, liquidação, pagamento).
+
+⚠️ IMPORTANTE — o conector NÃO aceita literais de texto entre aspas simples ('...').
+Para comparar colunas CHAR use a função CHAR(codigo_ascii). Portanto escreva o filtro assim:
+    f.IC_CONVERSAO IN (CHAR(67), CHAR(72))   -- CHAR(67)='C', CHAR(72)='H'
+NUNCA escreva f.IC_CONVERSAO IN ('C','H') (com aspas) — a query falha.
+
 ## REGRA 1 — DESPESA: estágios da execução orçamentária
 
 A despesa está em FATO_INTERVENCAO_DOTACAO. Os estágios da execução são colunas de valor distintas:

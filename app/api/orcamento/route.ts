@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
         SUM(ISNULL(f.VL_SALDO_MES_PAGO,0)) pago
       FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
-      WHERE d.NO_ANO = ${ano}`, 5)
+      WHERE d.NO_ANO = ${ano} AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))`, 5)
     const dr = desp.rows[0] ?? []
     const empenhado = n(dr[0]), liquidado = n(dr[1]), pago = n(dr[2])
 
@@ -70,7 +70,7 @@ export async function GET(req: NextRequest) {
       FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
       JOIN SEPLAN.DIM_INSTITUCIONAL i ON f.SK_INSTITUCIONAL = i.SK_INSTITUCIONAL
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
-      WHERE d.NO_ANO = ${ano}
+      WHERE d.NO_ANO = ${ano} AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))
       GROUP BY i.DS_ORGAO ORDER BY pago DESC`, 20)
 
     // Receita por categoria econômica
