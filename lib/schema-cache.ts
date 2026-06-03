@@ -21,6 +21,12 @@ export const CATALOG_TABLE_NAMES = [
   'DIM_EMENDA_PARLAMENTAR',
   'DIM_GRUPO_PROG_FINANCEIRA',
   'DIM_NATUREZA_RECEITA',
+  'DIM_PROGRAMA',
+  'DIM_ACAO',
+  'DIM_FUNCAO',
+  'DIM_SUBFUNCAO',
+  'DIM_DEPUTADO',
+  'DIM_PRODUTO',
 ]
 
 let cachedContext: string | null = null

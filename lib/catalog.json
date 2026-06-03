@@ -42,7 +42,13 @@
     "emenda": ["DIM_EMENDA_PARLAMENTAR"],
     "grupo programacao financeira": ["DIM_GRUPO_PROG_FINANCEIRA"],
     "natureza receita": ["DIM_NATUREZA_RECEITA"],
-    "tributo": ["DIM_NATUREZA_RECEITA"]
+    "tributo": ["DIM_NATUREZA_RECEITA"],
+    "programa": ["DIM_PROGRAMA"],
+    "acao": ["DIM_ACAO"],
+    "funcao": ["DIM_FUNCAO"],
+    "subfuncao": ["DIM_SUBFUNCAO"],
+    "deputado": ["DIM_DEPUTADO"],
+    "produto": ["DIM_PRODUTO"]
   },
   "entradas": [
     {
@@ -251,9 +257,18 @@
         "DS_STATUS_SUBACAO": "Status da subação"
       },
       "joins_comuns": [
-        "FATO_INTERVENCAO_DOTACAO ON SK_SUBACAO = SK_SUBACAO"
+        "FATO_INTERVENCAO_DOTACAO ON SK_SUBACAO = SK_SUBACAO",
+        "DIM_PROGRAMA ON SK_PROGRAMA = SK_PROGRAMA",
+        "DIM_ACAO ON SK_ACAO = SK_ACAO",
+        "DIM_FUNCAO ON SK_FUNCAO = SK_FUNCAO",
+        "DIM_SUBFUNCAO ON SK_SUBFUNCAO = SK_SUBFUNCAO",
+        "DIM_DEPUTADO ON SK_DEPUTADO = SK_DEPUTADO",
+        "DIM_PRODUTO ON SK_PRODUTO = SK_PRODUTO"
       ],
-      "exemplos_query": []
+      "exemplos_query": [
+        "-- Despesa paga por programa de governo (via DIM_SUBACAO):\nSELECT TOP 20 pr.DS_PROGRAMA, SUM(f.VL_SALDO_MES_PAGO) AS total_pago\nFROM SEPLAN.FATO_INTERVENCAO_DOTACAO f\nJOIN SEPLAN.DIM_SUBACAO s ON f.SK_SUBACAO = s.SK_SUBACAO\nJOIN SEPLAN.DIM_PROGRAMA pr ON s.SK_PROGRAMA = pr.SK_PROGRAMA\nJOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = 2025 AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))\nGROUP BY pr.DS_PROGRAMA\nORDER BY total_pago DESC",
+        "-- Despesa paga por função:\nSELECT fu.DS_FUNCAO, SUM(f.VL_SALDO_MES_PAGO) AS total_pago\nFROM SEPLAN.FATO_INTERVENCAO_DOTACAO f\nJOIN SEPLAN.DIM_SUBACAO s ON f.SK_SUBACAO = s.SK_SUBACAO\nJOIN SEPLAN.DIM_FUNCAO fu ON s.SK_FUNCAO = fu.SK_FUNCAO\nJOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = 2025 AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))\nGROUP BY fu.DS_FUNCAO\nORDER BY total_pago DESC"
+      ]
     },
     {
       "tabela": "DIM_FORNECEDOR",
@@ -322,6 +337,105 @@
       },
       "joins_comuns": [
         "FATO_EXECUCAO_RECEITA ON SK_NATUREZA_RECEITA = SK_NATUREZA_RECEITA"
+      ],
+      "exemplos_query": []
+    },
+    {
+      "tabela": "DIM_PROGRAMA",
+      "descricao": "Programas de governo do PPA. Ligada à despesa através de DIM_SUBACAO (SK_PROGRAMA). Use para analisar a despesa por programa de governo.",
+      "conceitos": ["programa", "programa de governo", "PPA"],
+      "colunas_chave": {
+        "SK_PROGRAMA": "Chave surrogate — JOIN com DIM_SUBACAO.SK_PROGRAMA",
+        "CD_PROGRAMA": "Código do programa",
+        "DS_PROGRAMA": "Nome do programa",
+        "DS_OBJETIVO_PROGRAMA": "Objetivo do programa",
+        "DS_TIPO_PROGRAMA": "Tipo do programa",
+        "DS_ORGAO_RESPONSAVEL": "Órgão responsável pelo programa",
+        "NO_ANO": "Ano de referência"
+      },
+      "joins_comuns": [
+        "DIM_SUBACAO ON SK_PROGRAMA = SK_PROGRAMA"
+      ],
+      "exemplos_query": []
+    },
+    {
+      "tabela": "DIM_ACAO",
+      "descricao": "Ações orçamentárias. Ligada à despesa através de DIM_SUBACAO (SK_ACAO). Use para analisar a despesa por ação.",
+      "conceitos": ["acao", "acao orcamentaria"],
+      "colunas_chave": {
+        "SK_ACAO": "Chave surrogate — JOIN com DIM_SUBACAO.SK_ACAO",
+        "CD_ACAO": "Código da ação",
+        "DS_ACAO": "Nome da ação",
+        "DS_OBJETIVO_ACAO": "Objetivo da ação",
+        "DS_TIPO_ACAO": "Tipo da ação",
+        "SK_PRODUTO": "JOIN com DIM_PRODUTO",
+        "NO_ANO": "Ano de referência"
+      },
+      "joins_comuns": [
+        "DIM_SUBACAO ON SK_ACAO = SK_ACAO",
+        "DIM_PRODUTO ON SK_PRODUTO = SK_PRODUTO"
+      ],
+      "exemplos_query": []
+    },
+    {
+      "tabela": "DIM_FUNCAO",
+      "descricao": "Funções de governo (classificação funcional da despesa: Saúde, Educação, Segurança, etc.). Ligada à despesa via DIM_SUBACAO (SK_FUNCAO).",
+      "conceitos": ["funcao", "funcao de governo", "classificacao funcional"],
+      "colunas_chave": {
+        "SK_FUNCAO": "Chave surrogate — JOIN com DIM_SUBACAO.SK_FUNCAO",
+        "CD_FUNCAO": "Código da função",
+        "DS_FUNCAO": "Nome da função (ex: Saúde, Educação)",
+        "NO_ANO": "Ano de referência"
+      },
+      "joins_comuns": [
+        "DIM_SUBACAO ON SK_FUNCAO = SK_FUNCAO"
+      ],
+      "exemplos_query": []
+    },
+    {
+      "tabela": "DIM_SUBFUNCAO",
+      "descricao": "Subfunções de governo (detalhamento da classificação funcional). Ligada à despesa via DIM_SUBACAO (SK_SUBFUNCAO).",
+      "conceitos": ["subfuncao"],
+      "colunas_chave": {
+        "SK_SUBFUNCAO": "Chave surrogate — JOIN com DIM_SUBACAO.SK_SUBFUNCAO",
+        "CD_SUBFUNCAO": "Código da subfunção",
+        "DS_SUBFUNCAO": "Nome da subfunção",
+        "NO_ANO": "Ano de referência"
+      },
+      "joins_comuns": [
+        "DIM_SUBACAO ON SK_SUBFUNCAO = SK_SUBFUNCAO"
+      ],
+      "exemplos_query": []
+    },
+    {
+      "tabela": "DIM_DEPUTADO",
+      "descricao": "Cadastro de deputados. Ligada à despesa via DIM_SUBACAO (SK_DEPUTADO) — útil para identificar a autoria de subações/emendas.",
+      "conceitos": ["deputado", "parlamentar"],
+      "colunas_chave": {
+        "SK_DEPUTADO": "Chave surrogate — JOIN com DIM_SUBACAO.SK_DEPUTADO",
+        "CD_DEPUTADO": "Código do deputado",
+        "NM_DEPUTADO": "Nome do deputado",
+        "NO_ANO": "Ano de referência"
+      },
+      "joins_comuns": [
+        "DIM_SUBACAO ON SK_DEPUTADO = SK_DEPUTADO"
+      ],
+      "exemplos_query": []
+    },
+    {
+      "tabela": "DIM_PRODUTO",
+      "descricao": "Produtos/entregas das ações de governo. Ligada via DIM_SUBACAO (SK_PRODUTO) e DIM_ACAO (SK_PRODUTO).",
+      "conceitos": ["produto", "entrega", "bem ou servico"],
+      "colunas_chave": {
+        "SK_PRODUTO": "Chave surrogate — JOIN com DIM_SUBACAO.SK_PRODUTO ou DIM_ACAO.SK_PRODUTO",
+        "CD_PRODUTO": "Código do produto",
+        "DS_PRODUTO": "Descrição do produto",
+        "NM_ABREVIADO_PRODUTO": "Nome abreviado do produto",
+        "NO_ANO": "Ano de referência"
+      },
+      "joins_comuns": [
+        "DIM_SUBACAO ON SK_PRODUTO = SK_PRODUTO",
+        "DIM_ACAO ON SK_PRODUTO = SK_PRODUTO"
       ],
       "exemplos_query": []
     }
