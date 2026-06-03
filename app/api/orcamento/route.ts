@@ -64,14 +64,15 @@ export async function GET(req: NextRequest) {
     const dr = desp.rows[0] ?? []
     const empenhado = n(dr[0]), liquidado = n(dr[1]), pago = n(dr[2])
 
-    // Despesa paga por órgão
+    // Despesa paga por função de governo (via DIM_SUBACAO -> DIM_FUNCAO)
     const fun = await agentQuery(`
-      SELECT TOP 6 i.DS_ORGAO nome, SUM(ISNULL(f.VL_SALDO_MES_PAGO,0)) pago
+      SELECT TOP 8 fu.DS_FUNCAO nome, SUM(ISNULL(f.VL_SALDO_MES_PAGO,0)) pago
       FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
-      JOIN SEPLAN.DIM_INSTITUCIONAL i ON f.SK_INSTITUCIONAL = i.SK_INSTITUCIONAL
+      JOIN SEPLAN.DIM_SUBACAO s ON f.SK_SUBACAO = s.SK_SUBACAO
+      JOIN SEPLAN.DIM_FUNCAO fu ON s.SK_FUNCAO = fu.SK_FUNCAO
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
       WHERE d.NO_ANO = ${ano} AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))
-      GROUP BY i.DS_ORGAO ORDER BY pago DESC`, 20)
+      GROUP BY fu.DS_FUNCAO ORDER BY pago DESC`, 20)
 
     // Receita por categoria econômica
     const cat = await agentQuery(`

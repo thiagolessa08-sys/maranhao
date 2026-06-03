@@ -84,9 +84,9 @@ export async function GET(req: NextRequest) {
       WHERE d.NO_ANO = ${ano} AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))
       GROUP BY nd.DS_NATUREZA_DESPESA ORDER BY empenhado DESC`, 20)
 
-    // Despesa paga por grupo de fonte (categorias) e por fonte (modalidades)
+    // Dotação por grupo de fonte (categorias) e por fonte (modalidades)
     const grupos = await agentQuery(`
-      SELECT fr.DS_GRUPO_FONTE nome, SUM(ISNULL(f.VL_SALDO_MES_PAGO,0)) v
+      SELECT fr.DS_GRUPO_FONTE nome, SUM(ISNULL(f.VL_LEI_MAIS_CREDITO,0)) v
       FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
       JOIN SEPLAN.DIM_FONTE_RECURSO fr ON f.SK_FONTE_RECURSO = fr.SK_FONTE_RECURSO
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
@@ -94,7 +94,7 @@ export async function GET(req: NextRequest) {
       GROUP BY fr.DS_GRUPO_FONTE ORDER BY v DESC`, 20)
 
     const fontes = await agentQuery(`
-      SELECT TOP 6 fr.DS_FONTE_RECURSO nome, SUM(ISNULL(f.VL_SALDO_MES_PAGO,0)) v
+      SELECT TOP 6 fr.DS_FONTE_RECURSO nome, SUM(ISNULL(f.VL_LEI_MAIS_CREDITO,0)) v
       FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
       JOIN SEPLAN.DIM_FONTE_RECURSO fr ON f.SK_FONTE_RECURSO = fr.SK_FONTE_RECURSO
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
