@@ -10,11 +10,12 @@ export const REGRAS_NEGOCIO = `
 REGRAS DE NEGÓCIO — OBRIGATÓRIAS
 ══════════════════════════════════════════
 
-## REGRA 0 — DESPESA: filtro OBRIGATÓRIO de conversão
+## REGRA 0 — filtro OBRIGATÓRIO de conversão (despesa e repasse)
 
-SEMPRE que consultar FATO_INTERVENCAO_DOTACAO, inclua no WHERE o filtro de conversão
-IC_CONVERSAO IN ('C','H'). Sem ele os valores de despesa ficam incorretos.
-Obrigatório em TODA query que use FATO_INTERVENCAO_DOTACAO (dotação, empenho, liquidação, pagamento).
+SEMPRE que consultar FATO_INTERVENCAO_DOTACAO **ou** FATO_REPASSE_FINANCEIRO, inclua no WHERE
+o filtro de conversão IC_CONVERSAO IN ('C','H'). Sem ele os valores ficam incorretos.
+Obrigatório em TODA query que use essas duas tabelas fato (dotação, empenho, liquidação,
+pagamento, repasses).
 
 ⚠️ IMPORTANTE — o conector NÃO aceita literais de texto entre aspas simples ('...').
 Para comparar colunas CHAR use a função CHAR(codigo_ascii). Portanto escreva o filtro assim:
