@@ -84,14 +84,15 @@ export async function GET(req: NextRequest) {
       WHERE d.NO_ANO = ${ano} AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))
       GROUP BY nd.DS_NATUREZA_DESPESA ORDER BY empenhado DESC`, 20)
 
-    // Dotação por grupo de fonte (categorias) e por fonte (modalidades)
+    // Dotação por categoria econômica da despesa (Correntes / Capital)
     const grupos = await agentQuery(`
-      SELECT fr.DS_GRUPO_FONTE nome, SUM(ISNULL(f.VL_LEI_MAIS_CREDITO,0)) v
+      SELECT gd.DS_CATEGORIA nome, SUM(ISNULL(f.VL_LEI_MAIS_CREDITO,0)) v
       FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
-      JOIN SEPLAN.DIM_FONTE_RECURSO fr ON f.SK_FONTE_RECURSO = fr.SK_FONTE_RECURSO
+      JOIN SEPLAN.DIM_NATUREZA_DESPESA nd ON f.SK_NATUREZA_DESPESA = nd.SK_NATUREZA_DESPESA
+      JOIN SEPLAN.DIM_GRUPO_DESPESA gd ON nd.SK_GRUPO_DESPESA = gd.SK_GRUPO_DESPESA
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
       WHERE d.NO_ANO = ${ano} AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))
-      GROUP BY fr.DS_GRUPO_FONTE ORDER BY v DESC`, 20)
+      GROUP BY gd.DS_CATEGORIA ORDER BY v DESC`, 20)
 
     const fontes = await agentQuery(`
       SELECT TOP 6 fr.DS_FONTE_RECURSO nome, SUM(ISNULL(f.VL_LEI_MAIS_CREDITO,0)) v
