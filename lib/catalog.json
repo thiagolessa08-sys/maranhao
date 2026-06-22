@@ -12,6 +12,11 @@
     "execucao orcamentaria": ["FATO_INTERVENCAO_DOTACAO"],
     "receita": ["FATO_EXECUCAO_RECEITA"],
     "arrecadacao": ["FATO_EXECUCAO_RECEITA"],
+    "previsao receita": ["FATO_ELABORACAO_PREVISAO_RECEITA"],
+    "receita prevista": ["FATO_ELABORACAO_PREVISAO_RECEITA"],
+    "orcado": ["FATO_ELABORACAO_PREVISAO_RECEITA"],
+    "LOA": ["FATO_ELABORACAO_PREVISAO_RECEITA"],
+    "reestimativa": ["FATO_ELABORACAO_PREVISAO_RECEITA"],
     "deducao": ["FATO_EXECUCAO_RECEITA"],
     "fundeb": ["FATO_EXECUCAO_RECEITA"],
     "renuncia": ["FATO_EXECUCAO_RECEITA"],
@@ -144,6 +149,34 @@
       ],
       "exemplos_query": [
         "-- Repasses recebidos por unidade gestora no ano:\nSELECT TOP 20 u.DS_UNIDADE_GESTORA, SUM(f.VL_REPASSE_RECEBIDO) AS recebido, SUM(f.VL_REPASSE_UTILIZADO) AS utilizado\nFROM SEPLAN.FATO_REPASSE_FINANCEIRO f\nJOIN SEPLAN.DIM_UNIDADE_GESTORA u ON f.SK_UNIDADE_GESTORA = u.SK_UNIDADE_GESTORA\nJOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = 2025 AND f.IC_CONVERSAO IN (CHAR(67),CHAR(72))\nGROUP BY u.DS_UNIDADE_GESTORA\nORDER BY recebido DESC"
+      ]
+    },
+    {
+      "tabela": "FATO_ELABORACAO_PREVISAO_RECEITA",
+      "descricao": "Tabela FATO da previsão/orçamento da receita (elaboração orçamentária). Contém a receita prevista na LOA, a projeção e a reestimativa, por data, natureza da receita, fonte de recurso, órgão e esfera orçamentária. É o ORÇADO da receita — compare com FATO_EXECUCAO_RECEITA (arrecadação realizada) para previsto x realizado.",
+      "conceitos": ["previsao receita", "receita prevista", "orcado", "LOA", "reestimativa"],
+      "colunas_chave": {
+        "SK_DATA_CALENDARIO": "JOIN com DIM_DATA_CALENDARIO",
+        "SK_NATUREZA_RECEITA": "JOIN com DIM_NATUREZA_RECEITA",
+        "SK_FONTE_RECURSO": "JOIN com DIM_FONTE_RECURSO",
+        "SK_INSTITUCIONAL": "JOIN com DIM_INSTITUCIONAL",
+        "SK_TIPO_NATUREZA_RECEITA": "Tipo da natureza (dimensão própria, não catalogada)",
+        "SK_ESFERA_ORCAMENTARIA": "Esfera orçamentária (dimensão própria, não catalogada)",
+        "VL_PREVISAO_RECEITA_LOA": "Receita prevista na LOA (orçado inicial)",
+        "VL_PREVISAO_RECEITA_PROJ": "Projeção da receita",
+        "VL_REESTIMATIVA_RECEITA": "Reestimativa da receita (orçado atualizado)",
+        "IC_MOMENTO_ELABORACAO": "Momento da elaboração (CHAR). Para filtrar use CHAR(codigo); o conector não aceita aspas simples",
+        "IC_ORIGEM_LANCAMENTO": "Origem do lançamento (CHAR)"
+      },
+      "joins_comuns": [
+        "DIM_DATA_CALENDARIO ON SK_DATA_CALENDARIO = SK_DATA_CALENDARIO",
+        "DIM_NATUREZA_RECEITA ON SK_NATUREZA_RECEITA = SK_NATUREZA_RECEITA",
+        "DIM_FONTE_RECURSO ON SK_FONTE_RECURSO = SK_FONTE_RECURSO",
+        "DIM_INSTITUCIONAL ON SK_INSTITUCIONAL = SK_INSTITUCIONAL"
+      ],
+      "exemplos_query": [
+        "-- Receita prevista (LOA) x arrecadada no ano:\nSELECT\n  (SELECT SUM(p.VL_PREVISAO_RECEITA_LOA) FROM SEPLAN.FATO_ELABORACAO_PREVISAO_RECEITA p JOIN SEPLAN.DIM_DATA_CALENDARIO dp ON p.SK_DATA_CALENDARIO = dp.SK_DATA_CALENDARIO WHERE dp.NO_ANO = 2025) AS previsto_loa,\n  (SELECT SUM(r.VL_ARRECADACAO_RECEITA) FROM SEPLAN.FATO_EXECUCAO_RECEITA r JOIN SEPLAN.DIM_DATA_CALENDARIO dr ON r.SK_DATA_CALENDARIO = dr.SK_DATA_CALENDARIO WHERE dr.NO_ANO = 2025) AS arrecadado",
+        "-- Previsão de receita por categoria econômica:\nSELECT nr.DS_CATEGORIA_ECONOMICA_RECEITA, SUM(f.VL_PREVISAO_RECEITA_LOA) AS previsto\nFROM SEPLAN.FATO_ELABORACAO_PREVISAO_RECEITA f\nJOIN SEPLAN.DIM_NATUREZA_RECEITA nr ON f.SK_NATUREZA_RECEITA = nr.SK_NATUREZA_RECEITA\nJOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO\nWHERE d.NO_ANO = 2025\nGROUP BY nr.DS_CATEGORIA_ECONOMICA_RECEITA\nORDER BY previsto DESC"
       ]
     },
     {
