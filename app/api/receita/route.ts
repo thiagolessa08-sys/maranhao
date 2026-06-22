@@ -4,11 +4,11 @@ import { agentQuery } from '@/lib/agent'
 
 export interface DadosReceita {
   kpis: {
-    orcado:           { valor: number; tendencia: 'up' | 'down' }
-    orcadoAtualizado: { valor: number; tendencia: 'up' | 'down' }
-    arrecadacaoMes:   { valor: number; vs_ano_anterior_pct: number }
-    acumulado:        { valor: number; vs_ano_anterior_pct: number }
-    mesAnterior:      { valor: number }
+    previsao:    { valor: number }
+    anoAtual:    { valor: number; vs_ano_anterior_pct: number }
+    anoAnterior: { valor: number }
+    mes:         { valor: number; vs_ano_anterior_pct: number }
+    mesAnterior: { valor: number }
   }
   mensal:     Array<{ mes: string; meta: number; realizado: number }>
   categorias: Array<{ nome: string; valor: number; pct: number }>
@@ -26,9 +26,9 @@ const n = (v: unknown) => { const x = Number(v); return Number.isFinite(x) ? x :
 function vazio(): DadosReceita {
   return {
     kpis: {
-      orcado: { valor: 0, tendencia: 'up' }, orcadoAtualizado: { valor: 0, tendencia: 'up' },
-      arrecadacaoMes: { valor: 0, vs_ano_anterior_pct: 0 }, acumulado: { valor: 0, vs_ano_anterior_pct: 0 },
-      mesAnterior: { valor: 0 },
+      previsao: { valor: 0 },
+      anoAtual: { valor: 0, vs_ano_anterior_pct: 0 }, anoAnterior: { valor: 0 },
+      mes: { valor: 0, vs_ano_anterior_pct: 0 }, mesAnterior: { valor: 0 },
     },
     mensal: MES_ABREV.slice(1).map(m => ({ mes: m, meta: 0, realizado: 0 })),
     categorias: [], historico: { meses: MES_NOME.slice(1), anos: {} }, origens: [],
@@ -88,17 +88,27 @@ export async function GET(req: NextRequest) {
       WHERE d.NO_ANO = ${ano} AND nr.DS_ORIGEM_RECEITA IS NOT NULL
       GROUP BY nr.DS_ORIGEM_RECEITA ORDER BY v DESC`, 20)
 
+    // Previsão da receita (LOA) do ano
+    let previsao = 0
+    try {
+      const prev = await agentQuery(`
+        SELECT SUM(ISNULL(f.VL_PREVISAO_RECEITA_LOA,0)) v
+        FROM SEPLAN.FATO_ELABORACAO_PREVISAO_RECEITA f
+        JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
+        WHERE d.NO_ANO = ${ano}`, 1)
+      previsao = n(prev.rows[0]?.[0])
+    } catch { previsao = 0 }
+
     const anosHist: Record<string, number[]> = {}
     for (let a = ano - 3; a <= ano; a++) anosHist[String(a)] = matriz[a]
 
     const dados: DadosReceita = {
       kpis: {
-        // Sem tabela de orçamento da receita: usa o arrecadado acumulado como referência.
-        orcado:           { valor: acumulado, tendencia: acumulado >= acumuladoPrev ? 'up' : 'down' },
-        orcadoAtualizado: { valor: acumulado, tendencia: acumulado >= acumuladoPrev ? 'up' : 'down' },
-        arrecadacaoMes:   { valor: arrecadacaoMes, vs_ano_anterior_pct: varPct(arrecadacaoMes, mesAnoAnterior) },
-        acumulado:        { valor: acumulado, vs_ano_anterior_pct: varPct(acumulado, acumuladoPrev) },
-        mesAnterior:      { valor: mesAnterior },
+        previsao:    { valor: previsao },
+        anoAtual:    { valor: acumulado, vs_ano_anterior_pct: varPct(acumulado, acumuladoPrev) },
+        anoAnterior: { valor: acumuladoPrev },
+        mes:         { valor: arrecadacaoMes, vs_ano_anterior_pct: varPct(arrecadacaoMes, mesAnoAnterior) },
+        mesAnterior: { valor: mesAnterior },
       },
       mensal: arrCur.map((v, i) => ({ mes: MES_ABREV[i + 1], meta: 0, realizado: v })),
       categorias: cat.rows.map(r => ({ nome: String(r[0] ?? '').trim() || 'Não informado', valor: n(r[1]), pct: Math.round((n(r[1]) / totCat) * 100) })),

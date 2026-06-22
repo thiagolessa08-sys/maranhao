@@ -366,14 +366,30 @@ export default function ReceitaPage() {
         {/* ── KPI Cards ── */}
         <div className="krec-kpi-grid">
 
-          {/* Orçado */}
+          {/* Previsão Receita */}
           <div className="krec-kpi accent">
-            <div className="krec-kpi-label">Orçado</div>
+            <div className="krec-kpi-label">Previsão Receita {ano}</div>
             {dados ? (
               <>
-                <div className="krec-kpi-val">{fmtM(dados.kpis.orcado.valor)}</div>
-                <div className={`krec-kpi-badge ${dados.kpis.orcado.tendencia === 'up' ? 'up' : 'down'}`}>
-                  {dados.kpis.orcado.tendencia === 'up' ? '▲' : '▼'} vs. ano ant.
+                <div className="krec-kpi-val">{fmtM(dados.kpis.previsao.valor)}</div>
+                <div className="krec-kpi-sub">previsão (LOA)</div>
+              </>
+            ) : (
+              <><div className="krec-sk" style={{ width: '80%', height: '28px', marginBottom: '8px' }} /><div className="krec-sk" style={{ width: '50%', height: '14px' }} /></>
+            )}
+            <div className="krec-kpi-arrow">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+          </div>
+
+          {/* Arrecadado no ano atual */}
+          <div className="krec-kpi">
+            <div className="krec-kpi-label">Arrecadado {ano}</div>
+            {dados ? (
+              <>
+                <div className="krec-kpi-val">{fmtM(dados.kpis.anoAtual.valor)}</div>
+                <div className={`krec-kpi-badge ${dados.kpis.anoAtual.vs_ano_anterior_pct >= 0 ? 'up' : 'down'}`}>
+                  {dados.kpis.anoAtual.vs_ano_anterior_pct >= 0 ? '▲' : '▼'} {dados.kpis.anoAtual.vs_ano_anterior_pct > 0 ? '+' : ''}{dados.kpis.anoAtual.vs_ano_anterior_pct}% vs. {ano - 1}
                 </div>
               </>
             ) : (
@@ -384,15 +400,13 @@ export default function ReceitaPage() {
             </div>
           </div>
 
-          {/* Orçado Atualizado */}
+          {/* Arrecadado no ano anterior */}
           <div className="krec-kpi">
-            <div className="krec-kpi-label">Orçado Atualizado</div>
+            <div className="krec-kpi-label">Arrecadado {ano - 1}</div>
             {dados ? (
               <>
-                <div className="krec-kpi-val">{fmtM(dados.kpis.orcadoAtualizado.valor)}</div>
-                <div className={`krec-kpi-badge ${dados.kpis.orcadoAtualizado.tendencia === 'up' ? 'up' : 'down'}`}>
-                  {dados.kpis.orcadoAtualizado.tendencia === 'up' ? '▲' : '▼'} vs. ano ant.
-                </div>
+                <div className="krec-kpi-val">{fmtM(dados.kpis.anoAnterior.valor)}</div>
+                <div className="krec-kpi-sub">arrecadação realizada</div>
               </>
             ) : (
               <><div className="krec-sk" style={{ width: '80%', height: '28px', marginBottom: '8px' }} /><div className="krec-sk" style={{ width: '50%', height: '14px' }} /></>
@@ -402,14 +416,14 @@ export default function ReceitaPage() {
             </div>
           </div>
 
-          {/* Arrecadação Mês */}
+          {/* Arrecadado no mês */}
           <div className="krec-kpi">
-            <div className="krec-kpi-label">Arrecadação Mês</div>
+            <div className="krec-kpi-label">Arrecadado no mês</div>
             {dados ? (
               <>
-                <div className="krec-kpi-val">{fmtM(dados.kpis.arrecadacaoMes.valor)}</div>
+                <div className="krec-kpi-val">{fmtM(dados.kpis.mes.valor)}</div>
                 <div className="krec-kpi-sub">
-                  {dados.kpis.arrecadacaoMes.vs_ano_anterior_pct > 0 ? '+' : ''}{dados.kpis.arrecadacaoMes.vs_ano_anterior_pct}% vs. ano ant.
+                  {dados.kpis.mes.vs_ano_anterior_pct > 0 ? '+' : ''}{dados.kpis.mes.vs_ano_anterior_pct}% vs. ano ant.
                 </div>
               </>
             ) : (
@@ -420,27 +434,9 @@ export default function ReceitaPage() {
             </div>
           </div>
 
-          {/* Acumulado */}
+          {/* Arrecadado no mês anterior */}
           <div className="krec-kpi warm">
-            <div className="krec-kpi-label">Arrecadação Acumulada</div>
-            {dados ? (
-              <>
-                <div className="krec-kpi-val">{fmtM(dados.kpis.acumulado.valor)}</div>
-                <div className="krec-kpi-sub">
-                  {dados.kpis.acumulado.vs_ano_anterior_pct > 0 ? '+' : ''}{dados.kpis.acumulado.vs_ano_anterior_pct}% vs. ano ant.
-                </div>
-              </>
-            ) : (
-              <><div className="krec-sk" style={{ width: '80%', height: '28px', marginBottom: '8px' }} /><div className="krec-sk" style={{ width: '50%', height: '14px' }} /></>
-            )}
-            <div className="krec-kpi-arrow">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </div>
-          </div>
-
-          {/* Mês Anterior */}
-          <div className="krec-kpi">
-            <div className="krec-kpi-label">Mês Anterior</div>
+            <div className="krec-kpi-label">Arrecadado mês anterior</div>
             {dados ? (
               <>
                 <div className="krec-kpi-val">{fmtM(dados.kpis.mesAnterior.valor)}</div>
@@ -524,7 +520,7 @@ export default function ReceitaPage() {
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="krec-donut-inner">
-                    <div className="krec-donut-val">{fmtM(dados.kpis.acumulado.valor)}</div>
+                    <div className="krec-donut-val">{fmtM(dados.kpis.anoAtual.valor)}</div>
                     <div className="krec-donut-lbl">acumulado</div>
                   </div>
                 </div>
