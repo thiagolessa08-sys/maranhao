@@ -458,7 +458,7 @@ export default function ReceitaPage() {
           {/* Arrecadação Mensal */}
           <div className="krec-card">
             <div className="krec-card-hdr">
-              <h2 className="krec-card-title">Arrecadação Mensal — Meta vs. Realizado</h2>
+              <h2 className="krec-card-title">Arrecadação Mensal</h2>
               <div className="krec-year-pills">
                 {ANOS.map(a => (
                   <button key={a} className={`krec-year-pill${ano === a ? ' active' : ''}`} onClick={() => setAno(a)}>{a}</button>
@@ -472,11 +472,10 @@ export default function ReceitaPage() {
                     <XAxis dataKey="mes" {...axisProps} dy={6} />
                     <YAxis tickFormatter={fmtAxis} {...axisProps} width={42} />
                     <Tooltip
-                      formatter={(v, name) => [fmtM(Number(v)), name === 'meta' ? 'Meta' : 'Realizado']}
+                      formatter={(v) => [fmtM(Number(v)), 'Realizado']}
                       contentStyle={tooltipStyle}
                       cursor={{ fill: 'var(--green-soft)' }}
                     />
-                    <Bar dataKey="meta"      fill="#d1d5db" radius={[4, 4, 0, 0]} name="meta" />
                     <Bar dataKey="realizado" fill="#2563eb" radius={[4, 4, 0, 0]} name="realizado" />
                   </BarChart>
                 </ResponsiveContainer>
