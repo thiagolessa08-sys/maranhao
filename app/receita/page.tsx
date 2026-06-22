@@ -588,8 +588,8 @@ export default function ReceitaPage() {
             </div>
             {dados ? (
               origensFiltradas.length > 0 ? (
-              <ResponsiveContainer width="100%" height={260}>
-                <BarChart data={origensFiltradas} layout="vertical" margin={{ top: 0, right: 56, left: 0, bottom: 0 }} barSize={18}>
+              <ResponsiveContainer width="100%" height={380}>
+                <BarChart data={origensFiltradas} layout="vertical" margin={{ top: 8, right: 56, left: 0, bottom: 8 }} barSize={34} barCategoryGap="20%">
                   <XAxis type="number" tickFormatter={fmtAxis} {...axisProps} />
                   <YAxis dataKey="nome" type="category" {...axisProps} width={112} />
                   <Tooltip
@@ -605,12 +605,12 @@ export default function ReceitaPage() {
                 </BarChart>
               </ResponsiveContainer>
               ) : (
-                <div style={{ height: 260, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink-3)', fontSize: 13, textAlign: 'center', padding: '0 24px' }}>
+                <div style={{ height: 380, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink-3)', fontSize: 13, textAlign: 'center', padding: '0 24px' }}>
                   Clique em uma categoria no gráfico "Por Categoria" para ver as origens.
                 </div>
               )
             ) : (
-              <div className="krec-sk-full" style={{ height: '260px' }} />
+              <div className="krec-sk-full" style={{ height: '380px' }} />
             )}
           </div>
 
