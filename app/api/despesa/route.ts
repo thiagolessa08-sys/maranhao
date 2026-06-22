@@ -12,7 +12,7 @@ export interface DadosDespesa {
   }
   secretarias: Array<{ nome: string; valor: number }>
   categorias:  Array<{ nome: string; valor: number; pct: number }>
-  elementos:   Array<{ nome: string; dotacao: number; empenhado: number; pct_exec: number; link?: boolean }>
+  elementos:   Array<{ nome: string; empenhado: number; liquidado: number }>
   modalidades: Array<{ nome: string; valor: number }>
 }
 
@@ -76,8 +76,8 @@ export async function GET(req: NextRequest) {
     // Elementos de despesa: dotação x empenhado
     const elem = await agentQuery(`
       SELECT TOP 8 nd.DS_NATUREZA_DESPESA nome,
-        SUM(ISNULL(f.VL_LEI_MAIS_CREDITO,0)) dotacao,
-        SUM(ISNULL(f.VL_SALDO_MES_EMPENHADO,0)) empenhado
+        SUM(ISNULL(f.VL_SALDO_MES_EMPENHADO,0)) empenhado,
+        SUM(ISNULL(f.VL_SALDO_MES_LIQUIDADO,0)) liquidado
       FROM SEPLAN.FATO_INTERVENCAO_DOTACAO f
       JOIN SEPLAN.DIM_NATUREZA_DESPESA nd ON f.SK_NATUREZA_DESPESA = nd.SK_NATUREZA_DESPESA
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
@@ -113,10 +113,7 @@ export async function GET(req: NextRequest) {
       },
       secretarias: orgaos.rows.map(r => ({ nome: String(r[0] ?? '').trim(), valor: n(r[1]) })),
       categorias: grupos.rows.map(r => ({ nome: String(r[0] ?? '').trim() || 'Não informado', valor: n(r[1]), pct: Math.round((n(r[1]) / totGrupos) * 100) })),
-      elementos: elem.rows.map(r => {
-        const dot = n(r[1]), emp = n(r[2])
-        return { nome: String(r[0] ?? '').trim(), dotacao: dot, empenhado: emp, pct_exec: dot > 0 ? +((emp / dot) * 100).toFixed(1) : 0 }
-      }),
+      elementos: elem.rows.map(r => ({ nome: String(r[0] ?? '').trim(), empenhado: n(r[1]), liquidado: n(r[2]) })),
       modalidades: fontes.rows.map(r => ({ nome: String(r[0] ?? '').trim(), valor: n(r[1]) })),
     }
     return NextResponse.json(dados)

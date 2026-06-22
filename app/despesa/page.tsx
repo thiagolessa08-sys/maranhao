@@ -520,7 +520,7 @@ export default function DespesaPage() {
           {/* Dotação por Elemento de Despesa */}
           <div className="kdes-card">
             <div className="kdes-card-hdr">
-              <h2 className="kdes-card-title">Dotação por Elemento de Despesa</h2>
+              <h2 className="kdes-card-title">Despesa por Elemento — Empenhado e Liquidado</h2>
               <button className="kdes-detail-btn" type="button">Detalhe</button>
             </div>
             {dados ? (
@@ -529,18 +529,16 @@ export default function DespesaPage() {
                   <thead>
                     <tr>
                       <th>Elemento de Despesa</th>
-                      <th>Dotação Inicial</th>
                       <th>Empenhado</th>
-                      <th>% Exec.</th>
+                      <th>Liquidado</th>
                     </tr>
                   </thead>
                   <tbody>
                     {dados.elementos.map((e, i) => (
                       <tr key={i}>
-                        <td className={e.link ? 'link' : ''}>{e.nome}</td>
-                        <td>{fmtMShort(e.dotacao)}</td>
+                        <td>{e.nome}</td>
                         <td>{fmtMShort(e.empenhado)}</td>
-                        <td className="exec-pct">{e.pct_exec.toFixed(1)}%</td>
+                        <td>{fmtMShort(e.liquidado)}</td>
                       </tr>
                     ))}
                   </tbody>
