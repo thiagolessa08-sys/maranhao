@@ -394,9 +394,7 @@ export default function ReceitaPage() {
             {dados ? (
               <>
                 <div className="krec-kpi-val">{fmtM(dados.kpis.anoAtual.valor)}</div>
-                <div className={`krec-kpi-badge ${dados.kpis.anoAtual.vs_ano_anterior_pct >= 0 ? 'up' : 'down'}`}>
-                  {dados.kpis.anoAtual.vs_ano_anterior_pct >= 0 ? '▲' : '▼'} {dados.kpis.anoAtual.vs_ano_anterior_pct > 0 ? '+' : ''}{dados.kpis.anoAtual.vs_ano_anterior_pct}% vs. {ano - 1}
-                </div>
+                <div className="krec-kpi-sub">arrecadação realizada</div>
               </>
             ) : (
               <><div className="krec-sk" style={{ width: '80%', height: '28px', marginBottom: '8px' }} /><div className="krec-sk" style={{ width: '50%', height: '14px' }} /></>
@@ -428,9 +426,7 @@ export default function ReceitaPage() {
             {dados ? (
               <>
                 <div className="krec-kpi-val">{fmtM(dados.kpis.mes.valor)}</div>
-                <div className="krec-kpi-sub">
-                  {dados.kpis.mes.vs_ano_anterior_pct > 0 ? '+' : ''}{dados.kpis.mes.vs_ano_anterior_pct}% vs. ano ant.
-                </div>
+                <div className="krec-kpi-sub">arrecadação realizada</div>
               </>
             ) : (
               <><div className="krec-sk" style={{ width: '80%', height: '28px', marginBottom: '8px' }} /><div className="krec-sk" style={{ width: '50%', height: '14px' }} /></>
