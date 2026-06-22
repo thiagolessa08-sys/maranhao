@@ -470,7 +470,7 @@ export default function ReceitaPage() {
             {dados ? (
               <>
                 <ResponsiveContainer width="100%" height={220}>
-                  <BarChart data={dados.mensal} margin={{ top: 5, right: 10, left: 0, bottom: 5 }} barSize={16} barCategoryGap="28%">
+                  <BarChart data={dados.mensal} margin={{ top: 5, right: 10, left: 0, bottom: 5 }} barSize={34} barCategoryGap="12%">
                     <XAxis dataKey="mes" {...axisProps} dy={6} />
                     <YAxis tickFormatter={fmtAxis} {...axisProps} width={42} />
                     <Tooltip
