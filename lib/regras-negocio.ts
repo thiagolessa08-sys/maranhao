@@ -54,6 +54,10 @@ Receita Líquida = VL_ARRECADACAO_RECEITA − (soma de todas as deduções acima
 Quando o usuário perguntar sobre receita/arrecadação, mostre a Receita Bruta e, quando
 fizer sentido, também as deduções e a Receita Líquida.
 
+FILTRO OBRIGATÓRIO da receita: junte DIM_NATUREZA_RECEITA e use nr.CD_TIPO_RECEITA = 1
+(considera apenas a receita classificada; exclui "Sem Nível Tipo"). Aplique em TODA consulta
+de arrecadação. Ex.: JOIN SEPLAN.DIM_NATUREZA_RECEITA nr ON f.SK_NATUREZA_RECEITA = nr.SK_NATUREZA_RECEITA ... WHERE nr.CD_TIPO_RECEITA = 1
+
 ## REGRA 3 — SINÔNIMOS
 
 "Arrecadação", "receita", "quanto entrou no caixa", "quanto foi arrecadado" → todos se

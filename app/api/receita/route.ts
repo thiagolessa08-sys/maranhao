@@ -47,8 +47,9 @@ export async function GET(req: NextRequest) {
     const hist = await agentQuery(`
       SELECT d.NO_ANO ano, d.NO_MES mes, SUM(ISNULL(f.VL_ARRECADACAO_RECEITA,0)) v
       FROM SEPLAN.FATO_EXECUCAO_RECEITA f
+      JOIN SEPLAN.DIM_NATUREZA_RECEITA nr ON f.SK_NATUREZA_RECEITA = nr.SK_NATUREZA_RECEITA
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
-      WHERE d.NO_ANO BETWEEN ${ano - 3} AND ${ano}
+      WHERE d.NO_ANO BETWEEN ${ano - 3} AND ${ano} AND nr.CD_TIPO_RECEITA = 1
       GROUP BY d.NO_ANO, d.NO_MES`, 100)
 
     const matriz: Record<number, number[]> = {}
@@ -75,7 +76,7 @@ export async function GET(req: NextRequest) {
       FROM SEPLAN.FATO_EXECUCAO_RECEITA f
       JOIN SEPLAN.DIM_NATUREZA_RECEITA nr ON f.SK_NATUREZA_RECEITA = nr.SK_NATUREZA_RECEITA
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
-      WHERE d.NO_ANO = ${ano}
+      WHERE d.NO_ANO = ${ano} AND nr.CD_TIPO_RECEITA = 1
       GROUP BY nr.DS_CATEGORIA_ECONOMICA_RECEITA ORDER BY v DESC`, 20)
     const totCat = cat.rows.reduce((s, r) => s + n(r[1]), 0) || 1
 
@@ -85,7 +86,7 @@ export async function GET(req: NextRequest) {
       FROM SEPLAN.FATO_EXECUCAO_RECEITA f
       JOIN SEPLAN.DIM_NATUREZA_RECEITA nr ON f.SK_NATUREZA_RECEITA = nr.SK_NATUREZA_RECEITA
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
-      WHERE d.NO_ANO = ${ano} AND nr.DS_ORIGEM_RECEITA IS NOT NULL
+      WHERE d.NO_ANO = ${ano} AND nr.CD_TIPO_RECEITA = 1 AND nr.DS_ORIGEM_RECEITA IS NOT NULL
       GROUP BY nr.DS_CATEGORIA_ECONOMICA_RECEITA, nr.DS_ORIGEM_RECEITA ORDER BY v DESC`, 80)
 
     // Previsão da receita (LOA) do ano
@@ -94,8 +95,9 @@ export async function GET(req: NextRequest) {
       const prev = await agentQuery(`
         SELECT SUM(ISNULL(f.VL_PREVISAO_RECEITA_LOA,0)) v
         FROM SEPLAN.FATO_ELABORACAO_PREVISAO_RECEITA f
+        JOIN SEPLAN.DIM_NATUREZA_RECEITA nr ON f.SK_NATUREZA_RECEITA = nr.SK_NATUREZA_RECEITA
         JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
-        WHERE d.NO_ANO = ${ano}`, 1)
+        WHERE d.NO_ANO = ${ano} AND nr.CD_TIPO_RECEITA = 1`, 1)
       previsao = n(prev.rows[0]?.[0])
     } catch { previsao = 0 }
 
