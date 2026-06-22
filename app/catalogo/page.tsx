@@ -68,7 +68,6 @@ export default function CatalogoPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/orcamento" className="text-blue-300 hover:text-white text-sm transition-colors">Orçamento</Link>
           <Link href="/chat" className="text-blue-300 hover:text-white text-sm transition-colors">Chat IA</Link>
           <Link href="/dashboard" className="text-blue-300 hover:text-white text-sm transition-colors">← Dashboard</Link>
         </div>
