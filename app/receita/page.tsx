@@ -253,7 +253,7 @@ const CSS = `
 export default function ReceitaPage() {
   const router = useRouter()
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
-  const [ano, setAno] = useState(2025)
+  const [ano, setAno] = useState(2026)
   const [dados, setDados] = useState<DadosReceita | null>(null)
   const [catSel, setCatSel] = useState<string | null>(null)
 
