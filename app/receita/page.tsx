@@ -255,6 +255,7 @@ export default function ReceitaPage() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const [ano, setAno] = useState(2025)
   const [dados, setDados] = useState<DadosReceita | null>(null)
+  const [catSel, setCatSel] = useState<string | null>(null)
 
   useEffect(() => {
     const saved = localStorage.getItem('k-theme') as 'light' | 'dark' | null
@@ -263,6 +264,7 @@ export default function ReceitaPage() {
 
   useEffect(() => {
     setDados(null)
+    setCatSel(null)
     fetch(`/api/receita?ano=${ano}`)
       .then(res => {
         if (res.status === 401) { router.push('/login'); return null }
@@ -290,6 +292,10 @@ export default function ReceitaPage() {
   }
 
   const histAnos = dados ? Object.keys(dados.historico.anos).sort() : []
+
+  // Filtro do gráfico de origem pela categoria selecionada no donut (obrigatório clicar)
+  const catAtiva = catSel ?? dados?.categorias?.[0]?.nome ?? ''
+  const origensFiltradas = dados ? dados.origens.filter(o => o.categoria === catAtiva) : []
 
   return (
     <div className="krec-root" data-theme={theme}>
@@ -481,10 +487,6 @@ export default function ReceitaPage() {
                 </ResponsiveContainer>
                 <div style={{ display: 'flex', gap: '16px', marginTop: '8px', paddingLeft: '4px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: 'var(--ink-3)' }}>
-                    <div style={{ width: '10px', height: '10px', borderRadius: '3px', background: '#d1d5db', flexShrink: 0 }} />
-                    Meta
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: 'var(--ink-3)' }}>
                     <div style={{ width: '10px', height: '10px', borderRadius: '3px', background: '#2563eb', flexShrink: 0 }} />
                     Realizado
                   </div>
@@ -511,9 +513,11 @@ export default function ReceitaPage() {
                         cx="50%" cy="50%"
                         innerRadius={44} outerRadius={72}
                         dataKey="valor" strokeWidth={0}
+                        onClick={(_, idx) => setCatSel(dados.categorias[idx]?.nome ?? null)}
+                        style={{ cursor: 'pointer' }}
                       >
-                        {dados.categorias.map((_, i) => (
-                          <Cell key={i} fill={DONUT_COLORS[i] ?? '#93c5fd'} />
+                        {dados.categorias.map((c, i) => (
+                          <Cell key={i} fill={DONUT_COLORS[i] ?? '#93c5fd'} opacity={c.nome === catAtiva ? 1 : 0.45} />
                         ))}
                       </Pie>
                     </PieChart>
@@ -525,7 +529,13 @@ export default function ReceitaPage() {
                 </div>
                 <div className="krec-donut-legend">
                   {dados.categorias.map((c, i) => (
-                    <div key={i} className="krec-donut-leg-row">
+                    <div
+                      key={i}
+                      className="krec-donut-leg-row"
+                      onClick={() => setCatSel(c.nome)}
+                      style={{ cursor: 'pointer', opacity: c.nome === catAtiva ? 1 : 0.5, fontWeight: c.nome === catAtiva ? 700 : undefined }}
+                      title={`Filtrar origens por ${c.nome}`}
+                    >
                       <div className="krec-donut-leg-dot" style={{ background: DONUT_COLORS[i] ?? '#93c5fd' }} />
                       <span className="krec-donut-leg-name" title={c.nome}>{c.nome}</span>
                       <span className="krec-donut-leg-pct">{c.pct}%</span>
@@ -577,12 +587,13 @@ export default function ReceitaPage() {
           {/* Arrecadação por Origem */}
           <div className="krec-card">
             <div className="krec-card-hdr">
-              <h2 className="krec-card-title">Arrecadação por Origem</h2>
+              <h2 className="krec-card-title">Arrecadação por Origem{catAtiva ? ` — ${catAtiva}` : ''}</h2>
               <button className="krec-detail-btn" type="button">Detalhes</button>
             </div>
             {dados ? (
+              origensFiltradas.length > 0 ? (
               <ResponsiveContainer width="100%" height={260}>
-                <BarChart data={dados.origens} layout="vertical" margin={{ top: 0, right: 56, left: 0, bottom: 0 }} barSize={18}>
+                <BarChart data={origensFiltradas} layout="vertical" margin={{ top: 0, right: 56, left: 0, bottom: 0 }} barSize={18}>
                   <XAxis type="number" tickFormatter={fmtAxis} {...axisProps} />
                   <YAxis dataKey="nome" type="category" {...axisProps} width={112} />
                   <Tooltip
@@ -591,12 +602,17 @@ export default function ReceitaPage() {
                     cursor={{ fill: 'var(--green-soft)' }}
                   />
                   <Bar dataKey="valor" radius={[0, 6, 6, 0]}>
-                    {dados.origens.map((_, i) => (
+                    {origensFiltradas.map((_, i) => (
                       <Cell key={i} fill={DONUT_COLORS[i] ?? '#93c5fd'} />
                     ))}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
+              ) : (
+                <div style={{ height: 260, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink-3)', fontSize: 13, textAlign: 'center', padding: '0 24px' }}>
+                  Clique em uma categoria no gráfico "Por Categoria" para ver as origens.
+                </div>
+              )
             ) : (
               <div className="krec-sk-full" style={{ height: '260px' }} />
             )}

@@ -16,7 +16,7 @@ export interface DadosReceita {
     meses: string[]
     anos:  Record<string, number[]>
   }
-  origens: Array<{ nome: string; valor: number }>
+  origens: Array<{ categoria: string; nome: string; valor: number }>
 }
 
 const MES_ABREV = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
@@ -81,12 +81,12 @@ export async function GET(req: NextRequest) {
 
     // Origens da receita
     const orig = await agentQuery(`
-      SELECT TOP 6 nr.DS_ORIGEM_RECEITA nome, SUM(ISNULL(f.VL_ARRECADACAO_RECEITA,0)) v
+      SELECT nr.DS_CATEGORIA_ECONOMICA_RECEITA categoria, nr.DS_ORIGEM_RECEITA nome, SUM(ISNULL(f.VL_ARRECADACAO_RECEITA,0)) v
       FROM SEPLAN.FATO_EXECUCAO_RECEITA f
       JOIN SEPLAN.DIM_NATUREZA_RECEITA nr ON f.SK_NATUREZA_RECEITA = nr.SK_NATUREZA_RECEITA
       JOIN SEPLAN.DIM_DATA_CALENDARIO d ON f.SK_DATA_CALENDARIO = d.SK_DATA_CALENDARIO
       WHERE d.NO_ANO = ${ano} AND nr.DS_ORIGEM_RECEITA IS NOT NULL
-      GROUP BY nr.DS_ORIGEM_RECEITA ORDER BY v DESC`, 20)
+      GROUP BY nr.DS_CATEGORIA_ECONOMICA_RECEITA, nr.DS_ORIGEM_RECEITA ORDER BY v DESC`, 80)
 
     // Previsão da receita (LOA) do ano
     let previsao = 0
@@ -113,7 +113,7 @@ export async function GET(req: NextRequest) {
       mensal: arrCur.map((v, i) => ({ mes: MES_ABREV[i + 1], meta: 0, realizado: v })),
       categorias: cat.rows.map(r => ({ nome: String(r[0] ?? '').trim() || 'Não informado', valor: n(r[1]), pct: Math.round((n(r[1]) / totCat) * 100) })),
       historico: { meses: MES_NOME.slice(1), anos: anosHist },
-      origens: orig.rows.map(r => ({ nome: String(r[0] ?? '').trim(), valor: n(r[1]) })),
+      origens: orig.rows.map(r => ({ categoria: String(r[0] ?? '').trim() || 'Não informado', nome: String(r[1] ?? '').trim(), valor: n(r[2]) })),
     }
     return NextResponse.json(dados)
   } catch (e) {
