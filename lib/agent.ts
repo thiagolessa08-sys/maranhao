@@ -2,10 +2,12 @@ const AGENT_URL = process.env.AGENT_URL!
 const AGENT_API_KEY = process.env.AGENT_API_KEY!
 
 function headers() {
-  return {
-    'Content-Type': 'application/json',
-    'X-API-Key': AGENT_API_KEY,
-  }
+  const h: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (AGENT_API_KEY) h['X-API-Key'] = AGENT_API_KEY
+  // Cloudflare Access (service token) — necessário no endpoint protegido (demo.sqltech.app)
+  if (process.env.CF_ACCESS_CLIENT_ID) h['CF-Access-Client-Id'] = process.env.CF_ACCESS_CLIENT_ID
+  if (process.env.CF_ACCESS_CLIENT_SECRET) h['CF-Access-Client-Secret'] = process.env.CF_ACCESS_CLIENT_SECRET
+  return h
 }
 
 export async function agentHealth(): Promise<{ status: string; db: string }> {
